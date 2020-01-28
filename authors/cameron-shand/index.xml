@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>**Cameron Shand** | Cameron Shand</title>
+    <link>https://sea-shunned.github.io/authors/cameron-shand/</link>
+      <atom:link href="https://sea-shunned.github.io/authors/cameron-shand/index.xml" rel="self" type="application/rss+xml" />
+    <description>**Cameron Shand**</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 27 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Evolving Controllably Difficult Datasets for Clustering</title>
+      <link>https://sea-shunned.github.io/publication/gecco-hawks/</link>
+      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>https://sea-shunned.github.io/publication/gecco-hawks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Towards an Adaptive Encoding for Evolutionary Data Clustering</title>
+      <link>https://sea-shunned.github.io/publication/gecco-adaptive-mock/</link>
+      <pubDate>Sun, 15 Jul 2018 00:00:00 +0000</pubDate>
+      <guid>https://sea-shunned.github.io/publication/gecco-adaptive-mock/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
