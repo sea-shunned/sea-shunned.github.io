@@ -2,8 +2,8 @@
   "name": "Cameron Shand",
   "short_name": "Cameron Shand",
   "lang": "en-us",
-  "theme_color": "rgb(4, 89, 209)",
-  "background_color": "rgb(4, 89, 209)",
+  "theme_color": "#2962ff",
+  "background_color": "#2962ff",
   "icons": [{
     "src": "/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_192x192_fill_lanczos_center_2.png",
     "sizes": "192x192",
