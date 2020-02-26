@@ -12,56 +12,5 @@
       <link>https://sea-shunned.github.io/authors/</link>
     </image>
     
-    <item>
-      <title>**Cameron Shand**</title>
-      <link>https://sea-shunned.github.io/authors/cameron-shand/</link>
-      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>https://sea-shunned.github.io/authors/cameron-shand/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>[Andrew Webb](http://www.awebb.info/)</title>
-      <link>https://sea-shunned.github.io/authors/andrew-webbhttp/www.awebb.info/</link>
-      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>https://sea-shunned.github.io/authors/andrew-webbhttp/www.awebb.info/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>[Julia Handl](https://personalpages.manchester.ac.uk/staff/Julia.Handl/)</title>
-      <link>https://sea-shunned.github.io/authors/julia-handlhttps/personalpages.manchester.ac.uk/staff/julia.handl/</link>
-      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>https://sea-shunned.github.io/authors/julia-handlhttps/personalpages.manchester.ac.uk/staff/julia.handl/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>[Richard Allmendinger](https://personalpages.manchester.ac.uk/staff/Richard.Allmendinger/)</title>
-      <link>https://sea-shunned.github.io/authors/richard-allmendingerhttps/personalpages.manchester.ac.uk/staff/richard.allmendinger/</link>
-      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>https://sea-shunned.github.io/authors/richard-allmendingerhttps/personalpages.manchester.ac.uk/staff/richard.allmendinger/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>John Keane</title>
-      <link>https://sea-shunned.github.io/authors/john-keane/</link>
-      <pubDate>Sat, 27 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>https://sea-shunned.github.io/authors/john-keane/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://sea-shunned.github.io/authors/admin/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://sea-shunned.github.io/authors/admin/</guid>
-      <description>&lt;p&gt;My current research looks at clustering, particularly within the context of evolutionary algorithms. My latest work, &lt;a href=&#34;https://github.com/sea-shunned/hawks&#34;&gt;HAWKS&lt;/a&gt;, is an EA for generating synthetic data that challenges and uncovers the (inductive) biases of clustering algorithms, helping to tackle the &lt;a href=&#34;https://www.sciencedirect.com/science/article/pii/S0065245808605203&#34;&gt;algorithm selection problem&lt;/a&gt; for clustering. It is designed to be (relatively) easy to use, and I&amp;rsquo;m always happy to hear how it&amp;rsquo;s been used.&lt;/p&gt;
-&lt;p&gt;My previous background is in &lt;a href=&#34;https://www.ucl.ac.uk/biochemical-engineering/about/what-biochemical-engineering&#34;&gt;biochemical engineering&lt;/a&gt;, which I still remain very much interested in. As a result, I hope to marry my more recent experience in machine learning with the healthcare domain, should the opportunity fortuitously arise.&lt;/p&gt;
-&lt;p&gt;This is a bare-bones website just to summarize my experience to-date. After my viva, I will be able to add further research content (though my previous &lt;a href=&#34;#publications&#34;&gt;publications&lt;/a&gt; are available). Please &lt;a href=&#34;mailto:cameron.shand@manchester.ac.uk&#34;&gt;contact me&lt;/a&gt; for collaboration, questions, etc.&lt;/p&gt;
-</description>
-    </item>
-    
   </channel>
 </rss>
