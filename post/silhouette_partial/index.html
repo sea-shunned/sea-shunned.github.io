@@ -28,7 +28,7 @@
   
     
   
-  <meta name="description" content="MathJax.Hub.Config({ TeX: { extensions: [&#34;color.js&#34;] }});  -- Table of Contents  Summary Introduction Definition of the silhouette width Calculating the silhouette width  Full calculation Partial calculation   Comparison  Results   Full code   Summary  Explain and visualize the silhouette width Show how to calculate it in numpy/scipy Show how to avoid complete recalculation when data is perturbed Compare computation time with sklearn  Introduction The fitness function in HAWKS uses the silhouette width, which is an internal cluster validity index first proposed in Rousseeuw (1987)1 that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster.">
+  <meta name="description" content="Explanation and illustration of the silhouette width, and code for both its pull and partial computation.">
 
   
   <link rel="alternate" hreflang="en-us" href="https://sea-shunned.github.io/post/silhouette_partial/">
@@ -271,7 +271,7 @@
   <meta property="og:site_name" content="Cameron Shand">
   <meta property="og:url" content="https://sea-shunned.github.io/post/silhouette_partial/">
   <meta property="og:title" content="Silhouette width partial computation | Cameron Shand">
-  <meta property="og:description" content="MathJax.Hub.Config({ TeX: { extensions: [&#34;color.js&#34;] }});  -- Table of Contents  Summary Introduction Definition of the silhouette width Calculating the silhouette width  Full calculation Partial calculation   Comparison  Results   Full code   Summary  Explain and visualize the silhouette width Show how to calculate it in numpy/scipy Show how to avoid complete recalculation when data is perturbed Compare computation time with sklearn  Introduction The fitness function in HAWKS uses the silhouette width, which is an internal cluster validity index first proposed in Rousseeuw (1987)1 that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster."><meta property="og:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png">
+  <meta property="og:description" content="Explanation and illustration of the silhouette width, and code for both its pull and partial computation."><meta property="og:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
@@ -323,7 +323,7 @@
       "url": "img/https://sea-shunned.github.io/"
     }
   },
-  "description": "MathJax.Hub.Config({ TeX: { extensions: [\"color.js\"] }});  -- Table of Contents  Summary Introduction Definition of the silhouette width Calculating the silhouette width  Full calculation Partial calculation   Comparison  Results   Full code   Summary  Explain and visualize the silhouette width Show how to calculate it in numpy/scipy Show how to avoid complete recalculation when data is perturbed Compare computation time with sklearn  Introduction The fitness function in HAWKS uses the silhouette width, which is an internal cluster validity index first proposed in Rousseeuw (1987)1 that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster."
+  "description": "Explanation and illustration of the silhouette width, and code for both its pull and partial computation."
 }
 </script>
 
@@ -719,7 +719,7 @@
 <li><a href="#comparison">Compare computation time</a> with <code>sklearn</code></li>
 </ul>
 <h1 id="introduction">Introduction</h1>
-<p>The fitness function in <a href="https://hawks.readthedocs.io/">HAWKS</a> uses the silhouette width, which is an <a href="https://doi.org/10.1016/j.patcog.2012.07.021">internal cluster validity index</a> first proposed in Rousseeuw (1987)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster. This has the utility of providing a number in the range $[-1,1]$, where a positive value indicates that a point is likely to have been assigned to the right cluster (as it is on average closer to the other points in its cluster than to any other cluster)</p>
+<p>The fitness function in <a href="https://hawks.readthedocs.io/">HAWKS</a> uses the silhouette width, which is an <a href="https://doi.org/10.1016/j.patcog.2012.07.021">internal cluster validity index</a> first proposed in Rousseeuw (1987)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster. This has the utility of providing a number in the range $[-1,1]$, where a positive value indicates that a point is likely to have been assigned to the right cluster (as it is on average closer to the other points in its cluster than to any other cluster).</p>
 <p>One issue with the silhouette width is it&rsquo;s complexity - $O(DN^{2})$, where $D$ is the dimensionality and $N$ is the number of data points. In HAWKS we have a population of solutions (datasets), and so the silhouette width needs to be calculated for each individual in the population every generation. Needless to say, this has the potential to make the evolution <em>very</em> slow.</p>
 <p>One useful property we can exploit is that the majority of the pairwise distances (which are used in the silhouette width) are unlikely to change between generations for the same individual as the changes are caused by <a href="https://www.obitko.com/tutorials/genetic-algorithms/operators.php">crossover and mutation</a> only. Neither of these operators are guaranteed to occur, and they operate on a subset of the clusters, thus changing only a subset of the pairwise distances.</p>
 <p>This post will explain the silhouette width, how it is typically calculated, and how we can utilize this partial computation to reduce computation.</p>
