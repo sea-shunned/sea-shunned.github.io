@@ -28,10 +28,11 @@
   
     
   
-  <meta name="description" content="Existing encodings for evolutionary clustering strike different trade-offs between model and search complexity, limiting the applicability to data sets with particular properties or to problems of moderate size. We use the hypervolume to identify convergence, triggering a change in the search space, comparing different strategies to focus the optimization in this new space. The most successful strategies meet the clustering performance achieved for an optimal (a priori) setting of the hyperparameter, at a ~40% reduction of computational expense.">
+  <meta name="description" content="This work is from April 2018, but I did not have a website then, and I did not get around to using this. Either way, if it&rsquo;s useful for even one person then it&rsquo;s worth posting here.
+The">
 
   
-  <link rel="alternate" hreflang="en-us" href="https://sea-shunned.github.io/publication/gecco-adaptive-mock/">
+  <link rel="alternate" hreflang="en-us" href="https://sea-shunned.github.io/post/jsd_gaussians/">
 
   
 
@@ -249,7 +250,7 @@
   <link rel="icon" type="image/png" href="/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_32x32_fill_lanczos_center_2.png">
   <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_192x192_fill_lanczos_center_2.png">
 
-  <link rel="canonical" href="https://sea-shunned.github.io/publication/gecco-adaptive-mock/">
+  <link rel="canonical" href="https://sea-shunned.github.io/post/jsd_gaussians/">
 
   
   
@@ -266,15 +267,16 @@
   <meta property="twitter:creator" content="@cwbshand">
   
   <meta property="og:site_name" content="Cameron Shand">
-  <meta property="og:url" content="https://sea-shunned.github.io/publication/gecco-adaptive-mock/">
-  <meta property="og:title" content="Towards an Adaptive Encoding for Evolutionary Data Clustering | Cameron Shand">
-  <meta property="og:description" content="Existing encodings for evolutionary clustering strike different trade-offs between model and search complexity, limiting the applicability to data sets with particular properties or to problems of moderate size. We use the hypervolume to identify convergence, triggering a change in the search space, comparing different strategies to focus the optimization in this new space. The most successful strategies meet the clustering performance achieved for an optimal (a priori) setting of the hyperparameter, at a ~40% reduction of computational expense."><meta property="og:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png">
+  <meta property="og:url" content="https://sea-shunned.github.io/post/jsd_gaussians/">
+  <meta property="og:title" content="Jensen-Shannon Divergence for Multivariate Gaussians | Cameron Shand">
+  <meta property="og:description" content="This work is from April 2018, but I did not have a website then, and I did not get around to using this. Either way, if it&rsquo;s useful for even one person then it&rsquo;s worth posting here.
+The"><meta property="og:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png">
   <meta property="twitter:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
   
     
-      <meta property="article:published_time" content="2018-07-15T00:00:00&#43;00:00">
+      <meta property="article:published_time" content="2020-02-27T00:00:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2018-07-15T00:00:00&#43;00:00">
+    <meta property="article:modified_time" content="2020-02-27T00:00:00&#43;00:00">
   
 
   
@@ -286,6 +288,8 @@
 
 
 
+
+  
 
 
 
@@ -295,19 +299,19 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Article",
+  "@type": "BlogPosting",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://sea-shunned.github.io/publication/gecco-adaptive-mock/"
+    "@id": "https://sea-shunned.github.io/post/jsd_gaussians/"
   },
-  "headline": "Towards an Adaptive Encoding for Evolutionary Data Clustering",
+  "headline": "Jensen-Shannon Divergence for Multivariate Gaussians",
   
-  "datePublished": "2018-07-15T00:00:00Z",
-  "dateModified": "2018-07-15T00:00:00Z",
+  "datePublished": "2020-02-27T00:00:00Z",
+  "dateModified": "2020-02-27T00:00:00Z",
   
   "author": {
     "@type": "Person",
-    "name": "**Cameron Shand**"
+    "name": "Cameron Shand"
   },
   
   "publisher": {
@@ -318,7 +322,7 @@
       "url": "img/https://sea-shunned.github.io/"
     }
   },
-  "description": "Existing encodings for evolutionary clustering strike different trade-offs between model and search complexity, limiting the applicability to data sets with particular properties or to problems of moderate size. We use the hypervolume to identify convergence, triggering a change in the search space, comparing different strategies to focus the optimization in this new space. The most successful strategies meet the clustering performance achieved for an optimal (a priori) setting of the hyperparameter, at a ~40% reduction of computational expense."
+  "description": "This work is from April 2018, but I did not have a website then, and I did not get around to using this. Either way, if it\u0026rsquo;s useful for even one person then it\u0026rsquo;s worth posting here.\nThe"
 }
 </script>
 
@@ -336,7 +340,7 @@
 
 
 
-  <title>Towards an Adaptive Encoding for Evolutionary Data Clustering | Cameron Shand</title>
+  <title>Jensen-Shannon Divergence for Multivariate Gaussians | Cameron Shand</title>
 
 </head>
 
@@ -596,7 +600,7 @@
 </nav>
 
 
-  <div class="pub">
+  <article class="article">
 
   
 
@@ -617,7 +621,7 @@
   
   
 <div class="article-container pt-3">
-  <h1>Towards an Adaptive Encoding for Evolutionary Data Clustering</h1>
+  <h1>Jensen-Shannon Divergence for Multivariate Gaussians</h1>
 
   
 
@@ -629,19 +633,6 @@
 
   
   
-  
-  
-  <div>
-    
-
-
-
-  
-  <span><strong>Cameron Shand</strong></span>, <span><a href="https://personalpages.manchester.ac.uk/staff/Richard.Allmendinger/">Richard Allmendinger</a></span>, <span><a href="https://personalpages.manchester.ac.uk/staff/Julia.Handl/">Julia Handl</a></span>, <span>John Keane</span>
-
-  </div>
-  
-  
 
   
   <span class="article-date">
@@ -649,13 +640,18 @@
     
       
     
-    July 2018
+    Feb 27, 2020
   </span>
   
 
   
 
   
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    1 min read
+  </span>
+  
 
   
   
@@ -679,53 +675,6 @@
 
 
 
-
-<div class="btn-links mb-3">
-  
-  
-
-
-
-
-
-
-
-
-  
-    
-  
-
-
-
-<a class="btn btn-outline-primary my-1 mr-1" href="https://dl.acm.org/doi/10.1145/3205455.3205506?cid=99659280871" target="_blank" rel="noopener">
-  PDF
-</a>
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-<a class="btn btn-outline-primary my-1 mr-1" href="/pdf/gecco18_mock_slides.pdf" target="_blank" rel="noopener">
-  Slides
-</a>
-
-
-
-
-
-
-
-</div>
 
 
   
@@ -735,49 +684,11 @@
 
   <div class="article-container">
 
-    
-    <h3>Abstract</h3>
-    <p class="pub-abstract">A key consideration in developing optimization approaches for data clustering is choice of a suitable encoding. Existing encodings strike different trade-offs between model and search complexity, limiting the applicability to data sets with particular properties or to problems of moderate size. Recent research has introduced an additional hyperparameter to directly govern the encoding granularity in the multi-objective clustering algorithm MOCK. Here, we investigate adapting this important hyperparameter during run-time. In particular, we consider a number of different trigger mechanisms to control the timing of changes to this hyperparameter and strategies to rapidly explore the newly &ldquo;opened&rdquo; search space resulting from this change. Experimental results illustrate distinct performance differences between the approaches tested, which can be explained in light of the relative importance of initialization, crossover and mutation in MOCK. The most successful strategies meet the clustering performance achieved for an optimal (a priori) setting of the hyperparameter, at a ~40% reduction of computational expense.</p>
-    
+    <div class="article-style">
+      <p><em>This work is from April 2018, but I did not have a website then, and I did not get around to using this. Either way, if it&rsquo;s useful for even one person then it&rsquo;s worth posting here.</em></p>
+<p>The</p>
 
-    
-    <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <div class="row">
-          <div class="col-12 col-md-3 pub-row-heading">Type</div>
-          <div class="col-12 col-md-9">
-            
-            
-            <a href="/publication/#1">
-              Conference paper
-            </a>
-            
-          </div>
-        </div>
-      </div>
-      <div class="col-md-1"></div>
     </div>
-    <div class="d-md-none space-below"></div>
-    
-
-    
-    <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <div class="row">
-          <div class="col-12 col-md-3 pub-row-heading">Publication</div>
-          <div class="col-12 col-md-9">GECCO (The Genetic and Evolutionary Computation Conference) 2018</div>
-        </div>
-      </div>
-      <div class="col-md-1"></div>
-    </div>
-    <div class="d-md-none space-below"></div>
-    
-
-    <div class="space-below"></div>
-
-    <div class="article-style"></div>
 
     
 
@@ -798,7 +709,7 @@
       
       
       <li>
-        <a href="https://twitter.com/intent/tweet?url=https://sea-shunned.github.io/publication/gecco-adaptive-mock/&amp;text=Towards%20an%20Adaptive%20Encoding%20for%20Evolutionary%20Data%20Clustering" target="_blank" rel="noopener" class="share-btn-twitter">
+        <a href="https://twitter.com/intent/tweet?url=https://sea-shunned.github.io/post/jsd_gaussians/&amp;text=Jensen-Shannon%20Divergence%20for%20Multivariate%20Gaussians" target="_blank" rel="noopener" class="share-btn-twitter">
           <i class="fab fa-twitter"></i>
         </a>
       </li>
@@ -811,7 +722,7 @@
       
       
       <li>
-        <a href="mailto:?subject=Towards%20an%20Adaptive%20Encoding%20for%20Evolutionary%20Data%20Clustering&amp;body=https://sea-shunned.github.io/publication/gecco-adaptive-mock/" target="_blank" rel="noopener" class="share-btn-email">
+        <a href="mailto:?subject=Jensen-Shannon%20Divergence%20for%20Multivariate%20Gaussians&amp;body=https://sea-shunned.github.io/post/jsd_gaussians/" target="_blank" rel="noopener" class="share-btn-email">
           <i class="fas fa-envelope"></i>
         </a>
       </li>
@@ -824,7 +735,7 @@
       
       
       <li>
-        <a href="https://www.linkedin.com/shareArticle?url=https://sea-shunned.github.io/publication/gecco-adaptive-mock/&amp;title=Towards%20an%20Adaptive%20Encoding%20for%20Evolutionary%20Data%20Clustering" target="_blank" rel="noopener" class="share-btn-linkedin">
+        <a href="https://www.linkedin.com/shareArticle?url=https://sea-shunned.github.io/post/jsd_gaussians/&amp;title=Jensen-Shannon%20Divergence%20for%20Multivariate%20Gaussians" target="_blank" rel="noopener" class="share-btn-linkedin">
           <i class="fab fa-linkedin-in"></i>
         </a>
       </li>
@@ -837,7 +748,7 @@
       
       
       <li>
-        <a href="https://web.whatsapp.com/send?text=Towards%20an%20Adaptive%20Encoding%20for%20Evolutionary%20Data%20Clustering%20https://sea-shunned.github.io/publication/gecco-adaptive-mock/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+        <a href="https://web.whatsapp.com/send?text=Jensen-Shannon%20Divergence%20for%20Multivariate%20Gaussians%20https://sea-shunned.github.io/post/jsd_gaussians/" target="_blank" rel="noopener" class="share-btn-whatsapp">
           <i class="fab fa-whatsapp"></i>
         </a>
       </li>
@@ -850,7 +761,7 @@
       
       
       <li>
-        <a href="https://reddit.com/submit?url=https://sea-shunned.github.io/publication/gecco-adaptive-mock/&amp;title=Towards%20an%20Adaptive%20Encoding%20for%20Evolutionary%20Data%20Clustering" target="_blank" rel="noopener" class="share-btn-reddit">
+        <a href="https://reddit.com/submit?url=https://sea-shunned.github.io/post/jsd_gaussians/&amp;title=Jensen-Shannon%20Divergence%20for%20Multivariate%20Gaussians" target="_blank" rel="noopener" class="share-btn-reddit">
           <i class="fab fa-reddit-alien"></i>
         </a>
       </li>
@@ -870,28 +781,110 @@
 
 
   
+
+
+
+
+
+
+  
+  
   
     
-  
-  
-
-
-
-
-
-
-  
-  
   
   
   <div class="media author-card content-widget-hr">
     
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_hu6b952c5b9a9a8ab9ed42a71878fec57b_740678_250x250_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
 
     <div class="media-body">
-      <h5 class="card-title"><a href="/authors/cameron-shand/"></a></h5>
-      
-      
+      <h5 class="card-title"><a href="https://sea-shunned.github.io/">Cameron Shand</a></h5>
+      <h6 class="card-subtitle">PhD in Machine Learning &amp; Evolutionary Computation</h6>
+      <p class="card-text">My research interests include (primarily unsupervised) machine learning, evolutionary computation, and the role of synthetic data.</p>
       <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:cameron.shand@manchester.ac.uk" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/sea-shunned" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.co.uk/citations?user=rnUquyoAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/cwbshand" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/cameronshand/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
   
 </ul>
 
@@ -912,7 +905,7 @@
 
 
   </div>
-</div>
+</article>
 
       
 

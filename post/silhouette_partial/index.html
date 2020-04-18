@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.7.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Cameron Shand">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="MathJax.Hub.Config({ TeX: { extensions: [&#34;color.js&#34;] }});  -- Table of Contents  Summary Introduction Definition of the silhouette width Calculating the silhouette width  Full calculation Partial calculation   Comparison  Results   Full code   Summary  Explain and visualize the silhouette width Show how to calculate it in numpy/scipy Show how to avoid complete recalculation when data is perturbed Compare computation time with sklearn  Introduction The fitness function in HAWKS uses the silhouette width, which is an internal cluster validity index first proposed in Rousseeuw (1987)1 that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://sea-shunned.github.io/post/silhouette_partial/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  <script src="/js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/monokai-sublime.min.css" crossorigin="anonymous" title="hl-light">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/monokai-sublime.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.1.2/lazysizes.min.js" integrity="sha256-Md1qLToewPeKjfAHU1zyPwOutccPAm5tahnaw7Osw0A=" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.css">
+
+  
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-156462188-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           document.location = url;
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target);  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-156462188-1', {});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="https://sea-shunned.github.io/post/silhouette_partial/">
+
+  
+  
+  
+  
+  
+    
+    
+  
+  
+  <meta property="twitter:card" content="summary">
+  
+  <meta property="twitter:site" content="@cwbshand">
+  <meta property="twitter:creator" content="@cwbshand">
+  
+  <meta property="og:site_name" content="Cameron Shand">
+  <meta property="og:url" content="https://sea-shunned.github.io/post/silhouette_partial/">
+  <meta property="og:title" content="Silhouette width partial computation | Cameron Shand">
+  <meta property="og:description" content="MathJax.Hub.Config({ TeX: { extensions: [&#34;color.js&#34;] }});  -- Table of Contents  Summary Introduction Definition of the silhouette width Calculating the silhouette width  Full calculation Partial calculation   Comparison  Results   Full code   Summary  Explain and visualize the silhouette width Show how to calculate it in numpy/scipy Show how to avoid complete recalculation when data is perturbed Compare computation time with sklearn  Introduction The fitness function in HAWKS uses the silhouette width, which is an internal cluster validity index first proposed in Rousseeuw (1987)1 that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster."><meta property="og:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png">
+  <meta property="twitter:image" content="https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-03-08T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2020-03-08T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://sea-shunned.github.io/post/silhouette_partial/"
+  },
+  "headline": "Silhouette width partial computation",
+  
+  "datePublished": "2020-03-08T00:00:00Z",
+  "dateModified": "2020-03-08T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Cameron Shand"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Cameron Shand",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "img/https://sea-shunned.github.io/"
+    }
+  },
+  "description": "MathJax.Hub.Config({ TeX: { extensions: [\"color.js\"] }});  -- Table of Contents  Summary Introduction Definition of the silhouette width Calculating the silhouette width  Full calculation Partial calculation   Comparison  Results   Full code   Summary  Explain and visualize the silhouette width Show how to calculate it in numpy/scipy Show how to avoid complete recalculation when data is perturbed Compare computation time with sklearn  Introduction The fitness function in HAWKS uses the silhouette width, which is an internal cluster validity index first proposed in Rousseeuw (1987)1 that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster."
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>Silhouette width partial computation | Cameron Shand</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Cameron Shand</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Cameron Shand</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#experience"><span>Experience</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#publications"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/files/cv_shand.pdf"><span>CV</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+            
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="https://hawks.readthedocs.io" target="_blank" rel="noopener"><span>HAWKS</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+
+      
+      <li class="nav-item">
+        <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Silhouette width partial computation</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Mar 8, 2020
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    15 min read
+  </span>
+  
+
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <!-- <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+</script> -->
+<!-- \definecolor{acolours}{HTML}{0459D1}
+\definecolor{bcolours}{HTML}{d15c04} -->
+<h2>Table of Contents</h2>
+<nav id="TableOfContents">
+  <ol>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#definition-of-the-silhouette-width">Definition of the silhouette width</a></li>
+    <li><a href="#calculating-the-silhouette-width">Calculating the silhouette width</a>
+      <ol>
+        <li><a href="#full-calculation">Full calculation</a></li>
+        <li><a href="#partial-calculation">Partial calculation</a></li>
+      </ol>
+    </li>
+    <li><a href="#comparison">Comparison</a>
+      <ol>
+        <li><a href="#results">Results</a></li>
+      </ol>
+    </li>
+    <li><a href="#full-code">Full code</a></li>
+  </ol>
+</nav>
+<h1 id="summary">Summary</h1>
+<ul>
+<li><a href="#definition-of-the-silhouette-width">Explain</a> and <a href="#sw_gif">visualize</a> the silhouette width</li>
+<li>Show <a href="#full-calculation">how to calculate</a> it in <code>numpy</code>/<code>scipy</code></li>
+<li>Show <a href="#partial-calculation">how to avoid complete recalculation</a> when data is perturbed</li>
+<li><a href="#comparison">Compare computation time</a> with <code>sklearn</code></li>
+</ul>
+<h1 id="introduction">Introduction</h1>
+<p>The fitness function in <a href="https://hawks.readthedocs.io/">HAWKS</a> uses the silhouette width, which is an <a href="https://doi.org/10.1016/j.patcog.2012.07.021">internal cluster validity index</a> first proposed in Rousseeuw (1987)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> that uses a ratio of the intra-cluster variance to inter-cluster separation to indicate whether a point (or object) is likely to be in the right cluster. This has the utility of providing a number in the range $[-1,1]$, where a positive value indicates that a point is likely to have been assigned to the right cluster (as it is on average closer to the other points in its cluster than to any other cluster)</p>
+<p>One issue with the silhouette width is it&rsquo;s complexity - $O(DN^{2})$, where $D$ is the dimensionality and $N$ is the number of data points. In HAWKS we have a population of solutions (datasets), and so the silhouette width needs to be calculated for each individual in the population every generation. Needless to say, this has the potential to make the evolution <em>very</em> slow.</p>
+<p>One useful property we can exploit is that the majority of the pairwise distances (which are used in the silhouette width) are unlikely to change between generations for the same individual as the changes are caused by <a href="https://www.obitko.com/tutorials/genetic-algorithms/operators.php">crossover and mutation</a> only. Neither of these operators are guaranteed to occur, and they operate on a subset of the clusters, thus changing only a subset of the pairwise distances.</p>
+<p>This post will explain the silhouette width, how it is typically calculated, and how we can utilize this partial computation to reduce computation.</p>
+<h1 id="definition-of-the-silhouette-width">Definition of the silhouette width</h1>
+<p>The silhouette width is calculated for a single data point (or object), $i$, and is defined as follows:</p>
+<p>$$
+s(i) = \frac{{b(i)} - a(i)}{\max\{a(i),b(i)\}}
+$$</p>
+<p>where $a(i)$ represents the cluster compactness (with respect to object $i$) and $b(i)$ represents minimum average separation from $i$ to another cluster. For $a(i)$, we calculate the average distance from $i$ to all other objects in its cluster:</p>
+<p>$$
+a(i) = \frac{\sum_{j\in C_{k}}~d{(i,j)}}{| C_{k} | - 1} \qquad ~i\neq j;~i \in C_{k};~C_{k} \in \mathcal{C}
+$$</p>
+<p>where $\left | C_{k} \right |$ is the $k$th cluster&rsquo;s cardinality, $\mathcal{C} = \{C_{1},\ldots,C_{K}\}$ is the set of $K$ clusters, and $d{(i,j)}$ is the distance (typically Euclidean) between objects $i$ and $j$. We divide by $| C_{k} | - 1$ as $d(i,i)$ is not included.</p>
+<p>We then calculate $b(i)$ as:</p>
+<p>$$
+b(i) = \min_{\forall C_{k} \in \mathcal{C}} \frac{\sum_{j\in C_{k}}~d{(i,j)}}{\left | C_{k} \right |} \qquad ~i \notin C_{k}.
+$$</p>
+<p>Note that for any singleton cluster (i.e. $|C_{k}|=1$ and $i \in C_{k}$), $s(i) = 0$.</p>
+<p>The different parts of this equation and how they relate can be seen in the following GIF:</p>
+<!-- ![Animated silhouette width calculation](/img/sw-gif.gif) -->
+<img class="special-img-class" width="90%" src="/img/sw-gif.gif" id="sw_gif">
+<p>To get the overall silhouette width, $s_{\text{all}},$<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> we then take the average $s(i)$ across all $N$ data points:</p>
+<p>$$
+s_{\text{all}} = \frac{1}{N} \sum_{i=1}^{N} s(i).
+$$</p>
+<h1 id="calculating-the-silhouette-width">Calculating the silhouette width</h1>
+<p>In this section I&rsquo;ll go over the full and then a reduced computation version of the silhouette width. You can skip to the <a href="#full-code">full code</a>, or see it implemented in HAWKS <a href="https://github.com/sea-shunned/hawks/blob/master/hawks/objectives.py">here</a>.</p>
+<h2 id="full-calculation">Full calculation</h2>
+<p>I&rsquo;ll show how we can compute this in <code>numpy</code>/<code>scipy</code>, though there is an implementation available in <code>sklearn</code> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html">here</a>. Note that I&rsquo;ve tried to make the implementation shorter by just making every cluster the same size.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
+<p>The blocks below show which part of the distance matrix corresponds tot he different parts of the silhouette width calculation. This distance matrix for a small dataset of $N=9$ and $K=3$, where each cluster contains three objects. For our purposes, the objects that belong in the same cluster are contiguous in the distance matrix, though thanks to <code>numpy</code> this isn&rsquo;t a requirement.
+<img class="special-img-class" width="90%" src="/img/sw_matrix.svg" id="sw_matrix"></p>
+<p>Calculating the pairwise distances is simple enough, thanks to <code>scipy</code>. One thing to note is that <code>scipy</code> uses a vector-form distance vector, rather than a full distance matrix, which would be more appropriate as $N$ grows. Using <code>squareform</code> with <code>pdist</code> slows things down, but it can be more intuitive to work with full distance matrices, so we&rsquo;ll do that here. For details, see <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.squareform.html">here</a>.</p>
+<pre><code class="language-python"># Initial imports
+from itertools import permutations
+from collections import defaultdict
+import numpy as np
+from scipy.spatial.distance import pdist, squareform
+
+def full_distances(data, metric=&quot;sqeuclidean&quot;):
+    return squareform(pdist(data, metric=metric))
+</code></pre>
+<p>For efficiency, we calculate $s(i)$ for every $i$ simultaneously. We start with $a(i)$, or the intra-cluster distances. Here, we select each of the relevant blocks on the diagonal of the distance matrix (as previously shown), then dividing the sum of these distances by the cardinality (i.e. size) of the cluster.</p>
+<pre><code class="language-python">def full_intraclusts(dists, N, cluster_size):
+    # Calculate the intracluster variance
+    a_vals = np.zeros((N,))
+    # Loop over each cluster (exploit equal size)
+    for start in range(0, N, cluster_size):
+        # Get the final index for that cluster
+        stop = start+cluster_size
+        # Get the relevant part of the dist array
+        clust_array = dists[start:stop, start:stop]
+        # Divide by the cardinality
+        a_vals[start:stop] = np.true_divide(
+            np.sum(clust_array, axis=0),
+            stop-start-1 # As we don't include d(i,i)
+        )
+    return a_vals
+</code></pre>
+<p>Calculating the minimum inter-cluster distances, $b(i)$, is slightly trickier. We need to calculate, for each data point, the average distance to every point in every other cluster, and then select the minimum of these averages. To get all the 2-tuple permutations of the clusters, we use <code>itertools.permutations</code> (and not <code>itertools.combinations</code>). We initialize the $b(i)$ values vector to <code>np.inf</code> so that if anything is unfilled, we&rsquo;ll get a warning later on. We could just use a single vector (of length $N$) for <code>b_vals</code>, keeping the minimum as we iterate over each cluster. Here, however, we are using a $N \times K$ matrix instead, as this is more useful later on in the partial calculation.</p>
+<p>For each cluster, we calculate the relevant indices to get the appropriate submatrix of the distance matrix. Then, we just calculate the mean distances to that cluster and store it in the column for that cluster. We can then later select the minimum from the $K$ columns.</p>
+<pre><code class="language-python">def full_interclusts(dists, N, K, cluster_size):
+    # Calculate the intercluster variance
+    # Get the permutations of cluster numbers
+    perms = permutations(range(K), 2)
+    # Initialize the b_values
+    # Default to np.inf so we get a warning if it doesn't work
+    b_vals = np.full((N, K), np.inf)
+    # Calc each intercluster dist
+    for c1, c2 in perms:
+        # Get indices for distance array
+        c1_start = c1*cluster_size
+        c1_stop = c1_start+cluster_size
+        c2_start = c2*cluster_size
+        c2_stop = c2_start+cluster_size
+        # Get the relevant part of the dist array
+        clust_array = dists[c1_start:c1_stop, c2_start:c2_stop]
+        # Select the minimum average distance
+        b_vals[c1_start:c1_stop, c2] = np.mean(clust_array, axis=1)
+    return b_vals
+</code></pre>
+<p>Putting it all together, we can calculate the silhouette width as follows:</p>
+<pre><code class="language-python">def full_silh(data, N, cluster_size, K):
+    # Get the distances
+    dists = full_distances(data)
+    # Calculate the main terms
+    a_vals = full_intraclusts(dists, N, cluster_size)
+    b_vals = full_interclusts(dists, N, K, cluster_size)
+    # Select the minimum average distance
+    b_vec = b_vals.min(1)
+    # Calculate the numerator and denominator
+    top_term = b_vec - a_vals
+    bottom_term = np.maximum(b_vec, a_vals)
+    res = top_term / bottom_term
+    # Handle singleton clusters
+    res = np.nan_to_num(res)
+    return np.mean(res), dists, a_vals, b_vals
+</code></pre>
+<p>Let&rsquo;s validate that our method of calculating works:</p>
+<pre><code class="language-python">def test_full():
+    # Set random seed
+    np.random.seed(42)
+    # Setup variables
+    N, D, K = 1000, 2, 10
+    cluster_size = int(N/K)
+    data, labels = random_data(cluster_size, D, K)
+    # Calculate the silhouette widths
+    our_sw = full_silh(data, N, cluster_size, K)
+    sk_sw = silhouette_score(data, labels, metric='sqeuclidean')
+    print(f&quot;Our method:   {our_sw}&quot;)
+    print(f&quot;Scikit-learn: {sk_sw}&quot;)
+    assert np.isclose(our_sw, sk_sw)
+</code></pre>
+<pre><code class="language-bash">Our method:   0.8039652717646208
+Scikit-learn: 0.8039652717646208
+</code></pre>
+<p>Fortunately, we get the same as <code>sklearn</code>, so assuming we don&rsquo;t both have the <em>exact same bug</em> we can move on.</p>
+<h2 id="partial-calculation">Partial calculation</h2>
+<p>Now we can look at refining this so that we only recompute what is needed, following a partial change in the data. When a single cluster changes, the pairwise distances in corresponding rows/columns for those data points in the distance matrix also change. Therefore, only the $a(i)$ values in the clusters that change need to be recomputed, and the cluster combinations in $b(i)$ which include a modified cluster (this is where storing all $K$ values for each data point in <code>b_vals</code> pays off).</p>
+<p>In our scenario, the cluster change results from a perturbation (from crossover or mutation), and so we know which clusters have changed. Therefore, we know which subsets of the distance matrix need recomputation, which we can do as follows:</p>
+<pre><code class="language-python">def partial_distances(data, dists, cluster_size, changed_clusters, metric=&quot;sqeuclidean&quot;):
+    for i, changed in enumerate(changed_clusters):
+        # Skip if unchanged
+        if not changed:
+            continue
+        # Get the indices for the cluster
+        start = i*cluster_size
+        stop = start+cluster_size
+        # Calculate the new block of pairwise matrices
+        new_dists = cdist(
+            data,
+            data[start:stop, :],
+            metric=metric
+        )
+        # Insert the new distances (in both as symmetric)
+        dists[:, start:stop] = new_dists
+        dists[start:stop, :] = new_dists.T
+    return dists
+</code></pre>
+<p>The actual functions for the calculation $a(i)$ is mostly identical, but the list of clusters that have changed is used to skip the clusters that don&rsquo;t require recalculation:</p>
+<pre><code class="language-python">def partial_intraclusts(a_vals, dists, N, cluster_size, changed_list):
+    # Loop over each cluster (exploit equal size)
+    for clust_num, changed in enumerate(changed_list):
+        if not changed:
+            continue
+        # Get the indices for the cluster
+        start = cluster_size * clust_num
+        stop = start + cluster_size
+        # Get the relevant part of the dist array
+        clust_array = dists[start:stop, start:stop]
+        # Divide by the cardinality
+        a_vals[start:stop] = np.true_divide(
+            np.sum(clust_array, axis=0),
+            stop-start-1 # As we don't include d(i,i)
+        )
+    return a_vals
+</code></pre>
+<p>For the $b(i)$ values, a change in any single cluster requires some recalculation for every other cluster, but only a subset of the possible combinations need to be done. For example, in the <a href="#sw_matrix_changed">annotated distance matrix</a> below we can see that if $C_{3}$ were changed, anything that involves $C_{3}$ needs recalculation to see if there is a new minimum.</p>
+<img class="special-img-class" width="90%" src="/img/sw_matrix_changed.svg" id="sw_matrix_changed">
+<p>So, for each cluster that has changed, we can loop over every <em>other</em> cluster and then update the relevant parts of the <code>b_vals</code> matrix as shown below:</p>
+<pre><code class="language-python">def partial_interclusts(b_vals, dists, K, cluster_size, changed_list):
+    # Loop over the clusters that have changed
+    for c1, changed in enumerate(changed_list):
+        if changed:
+            # Determine the relevant indices
+            c1_start = c1 * cluster_size
+            c1_stop = c1_start + cluster_size
+            # Loop over every other cluster
+            for c2 in range(K):
+                if c1 == c2:
+                    continue
+                # Get indices for distance array
+                c2_start = c2 * cluster_size
+                c2_stop = c2_start + cluster_size
+                # Get the relevant part of the dist array
+                clust_array = dists[c1_start:c1_stop, c2_start:c2_stop]
+                # Set the minimum average distance for the c1,c2 combo
+                b_vals[c1_start:c1_stop, c2] = np.mean(clust_array, axis=1)
+                # Set the minimum average distance for the c2,c1 combo
+                b_vals[c2_start:c2_stop, c1] = np.mean(clust_array, axis=0)
+    return b_vals
+</code></pre>
+<p>Putting it all together, our overall function can enable both full and partial recomputation:</p>
+<pre><code class="language-python">def partial_silh(data, N, cluster_size, K, changed_list=None, dists=None, a_vals=None, b_vals=None):
+    if changed_list is None:
+        changed_list = [True]*K
+    # Get the distances
+    if dists is None:
+        dists = full_distances(data)
+    else:
+        dists = partial_distances(data, dists, cluster_size, changed_list)
+    # Allows us to use this function for the first calc
+    if a_vals is None:
+        a_vals = np.zeros((N,))
+    if b_vals is None:
+        b_vals = np.full((N, K), np.inf)
+    # Calculate the main terms
+    a_vals = partial_intraclusts(a_vals, dists, N, cluster_size, changed_list)
+    b_vals = partial_interclusts(b_vals, dists, K, cluster_size, changed_list)
+    # Select the minimum average distance
+    b_vec = b_vals.min(1)
+    # Calculate the numerator and denominator
+    top_term = b_vec - a_vals
+    bottom_term = np.maximum(b_vec, a_vals)
+    res = top_term / bottom_term
+    # Handle singleton clusters
+    res = np.nan_to_num(res)
+    return np.mean(res), dists, a_vals, b_vals
+</code></pre>
+<p>Now let&rsquo;s check that our new functions work by first calculating the full silhouette width, and then modifying two clusters and running it again using the partial computation.</p>
+<pre><code class="language-python">def test_partial():
+    # Set random seed
+    np.random.seed(42)
+    # Setup variables
+    N, D, K = 1000, 2, 10
+    cluster_size = int(N/K)
+    data, labels = random_data(cluster_size, D, K)
+    changed_list = [True]*K
+    # Need to first do the full calculation
+    our_sw, dists, a_vals, b_vals = partial_silh(data, N, cluster_size, K, changed_list)
+    # Compare with the full scikit calc to check
+    sk_sw = silhouette_score(data, labels, metric='sqeuclidean')
+    assert np.isclose(our_sw, sk_sw)
+    # Drastically change the first cluster
+    data[:100] = np.random.multivariate_normal(
+        mean=[np.random.rand() * 1000 for _ in range(D)],
+        cov=np.eye(D),
+        size=cluster_size
+    )
+    # Drastically change the third cluster
+    data[200:300] = np.random.multivariate_normal(
+        mean=[np.random.rand() * 500 for _ in range(D)],
+        cov=np.eye(D),
+        size=cluster_size
+    )
+    # We changed the first and third cluster
+    changed_list = [True, False, True, False, False]
+    # Now partially recalculate the silhouette width
+    our_sw, _, _, _ = partial_silh(data, N, cluster_size, K, changed_list, dists, a_vals, b_vals)
+    sk_sw = silhouette_score(data, labels, metric='sqeuclidean')
+    print(f&quot;Partial method: {our_sw}&quot;)
+    print(f&quot;Full method:    {full_silh(data, N, cluster_size, K)[0]}&quot;)
+    print(f&quot;Scikit-learn:   {sk_sw}&quot;)
+    assert np.isclose(our_sw, sk_sw)
+</code></pre>
+<pre><code class="language-bash">Partial method: 0.8991699790956502
+Full method:    0.8991699790956502
+Scikit-learn:   0.8991699790956502
+</code></pre>
+<p>Great! Now, we can look at whether all of this was actually worth it (in terms of computation, at least).</p>
+<h1 id="comparison">Comparison</h1>
+<p>To see if the partial calculation is worth it, we need to compare the run times between the full method, the partial method, and the <code>sklearn</code> method when run first on the dataset, and then again after the data has been modified. By varying some different parameters, such as the proportion of clusters that are being changed, the size of the dataset ($N$) and the dimensionality ($D$), we will see if there is a point where the overhead of partial computation outweighs the savings. After all, matrix multiplications are <em>awfully</em> efficient, and the overhead we have created with for loops is, well, potentially less efficient. If the proportion of clusters that change is large, it could quite reasonably be that restarting and calculating the full silhouette width is more efficient.</p>
+<!-- For simplicity, we will be using equally sized clusters, i.e. $|C_{1}| = |C_{2}| = \ldots = |C_{K}| = \frac{N}{K}$. This isn't a requirement, it just makes life easier and the code slightly shorter. -->
+<p>To ensure a robust timing, each method is run 10 times, and the average time is taken. Here is the code for the experiment:</p>
+<pre><code class="language-python">def random_data(cluster_size, D, K):
+    data_list = []
+    for k in range(K):
+        # Generate some random normal data
+        data = np.random.multivariate_normal(
+            mean=[np.random.rand() * 5 * k for _ in range(D)],
+            cov=np.eye(D),
+            size=cluster_size
+        )
+        # Append labels to the data
+        # Note that this is only needed for the partial computation
+        data = np.hstack((data, np.full((cluster_size, 1), k)))
+        # Add the data to our list
+        data_list.append(data)
+    # Create a single array of the data
+    full_data = np.concatenate(data_list)
+    labels = full_data[:, -1]
+    return full_data[:, :-1], labels
+
+def modify_data(data, changed_list, cluster_size, D):
+    new_data = data.copy()
+    for i, changed in enumerate(changed_list):
+        if changed:
+            start = i*cluster_size
+            stop = start + cluster_size
+            new_data[start:stop] = np.random.multivariate_normal(
+                mean=[np.random.rand() * np.random.randint(100, 1000) for _ in range(D)],
+                cov=np.eye(D),
+                size=cluster_size
+            )
+    return new_data
+
+def add_result(res, N, D, K, changes, method, time):
+    res[&quot;# Examples&quot;].append(N)
+    res[&quot;Dimensionality&quot;].append(D)
+    res[&quot;Number of Clusters&quot;].append(K)
+    res[&quot;Proportion Changes&quot;].append(changes)
+    res[&quot;Method&quot;].append(method)
+    res[&quot;Time (s)&quot;].append(time)
+    return res
+
+def time_comparison(Ns, Ds, Ks, changes_list):
+    params = product(Ns, Ds, Ks, changes_list)
+    res = defaultdict(list)
+    repeats = 10
+    # Loop over param combs
+    for N, D, K, changes in params:
+        cluster_size = int(N/K)
+        data, labels = random_data(cluster_size, D, K)
+        # Simulate expected mutations
+        changed_list = [True if np.random.rand() &lt; (changes/K) else False for _ in range(K)]
+        # Just modify it the once so it doesn't interfere with timing
+        new_data = modify_data(data, changed_list, cluster_size, D)
+
+        for _ in range(repeats):
+            # Full calculation
+            start = time.time()
+            # Run initial
+            test = full_silh(data, N, cluster_size, K)
+            # Run on mutated data
+            full_sw, _, _, _ = full_silh(new_data, N, cluster_size, K)
+            full_time = time.time() - start
+            # Store the result
+            res = add_result(res, N, D, K, changes, &quot;Full&quot;, full_time)
+
+            # Partial calculation
+            start = time.time()
+            # Run initial
+            test2, dists, a_vals, b_vals = partial_silh(data, N, cluster_size, K)
+            # Run on mutated data
+            partial_sw, _, _, _ = partial_silh(new_data, N, cluster_size, K, changed_list, dists, a_vals, b_vals)
+            partial_time = time.time() - start
+            # Store the result
+            res = add_result(res, N, D, K, changes, &quot;Partial&quot;, partial_time)
+
+            # sklearn calculation
+            start = time.time()
+            _ = silhouette_score(data, labels, metric='sqeuclidean')
+            sklearn_sw = silhouette_score(new_data, labels, metric='sqeuclidean')
+            sk_time = time.time() - start
+            # Store the result
+            res = add_result(res, N, D, K, changes, &quot;sklearn&quot;, sk_time)
+            
+            # Check that all the results are the same
+            assert np.isclose(full_sw, partial_sw) and np.isclose(partial_sw, sklearn_sw)
+
+    df = pd.DataFrame(res)
+    df.to_csv(&quot;sw_times.csv&quot;)
+    return df
+
+def plot_times(df):
+    # Construct a facetgrid
+    g = sns.FacetGrid(
+        data=df.groupby([&quot;# Examples&quot;, &quot;Dimensionality&quot;, &quot;Proportion Changes&quot;, &quot;Method&quot;])[&quot;Time&quot;].mean().reset_index(),
+        row=&quot;# Examples&quot;,
+        col=&quot;Dimensionality&quot;,
+        hue=&quot;Method&quot;,
+        margin_titles=True
+    )
+    # Plot the data
+    g = g.map(plt.plot, &quot;Proportion Changes&quot;, &quot;Time&quot;, marker=&quot;.&quot;).set(yscale=&quot;log&quot;)
+    g = g.add_legend()
+    # Save the results
+    g.savefig(&quot;sw_times.png&quot;, dpi=600)
+</code></pre>
+<h2 id="results">Results</h2>
+<p>Below is the plot of results across our different parameters:</p>
+<img class="special-img-class" width="100%" src="/img/sw_times.png">
+<p>As expected, the partial computation does reduce the time, but with diminishing and even adverse effects as we increase the proportion of clusters that are being changed. Fortunately in HAWKS, each individual has on average a single change, so we&rsquo;re on the far left-hand side of the x-axis. Our partial method is about twice the speed of the full computation, becoming increasingly useful as $D$ and $N$ increase. Not groundbreaking, but practically useful.</p>
+<p>Interestingly, it seems that <code>sklearn</code> is faster for smaller datasets (both in terms of $N$ and $D$), but our full computation is faster as either increases. Although beyond the scope of this post, I would be interested to see if the <code>sklearn</code> approach is more memory efficient (I believe it is), and when used properly on a server it&rsquo;s use of chunking/<code>joblib</code> can help a lot to explicitly distribute compute.</p>
+<h1 id="full-code">Full code</h1>
+<p>The full code is available as a <a href="https://gist.github.com/sea-shunned/6980673d32b0b14fbe181191ec7ef188">GitHub gist</a>. It is mostly for illustration, however. <a href="https://github.com/sea-shunned/hawks/blob/master/hawks/objectives.py">The code in HAWKS</a> is a little neater, but I would also recommend checking out <a href="https://github.com/scikit-learn/scikit-learn/blob/8122e77bee8414c787f4bcd730673d2c0e137d06/sklearn/metrics/cluster/_unsupervised.py#L37"><code>scikit-learn</code>'s source code</a> for another way of doing it, where they also have some great extras that can save on memory (and use <code>joblib</code> to explicitly parallelize chunks of the distance matrix).</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://www.sciencedirect.com/science/article/pii/0377042787901257">Rousseeuw, Peter J. &ldquo;Silhouettes: a graphical aid to the interpretation and validation of cluster analysis.&rdquo; Journal of computational and applied mathematics 20 (1987): 53-65.</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>I use $s_{\textit{all}}$ for this, though I have seen $\tilde{s}$ used. <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>This is quite unrealistic, but relatively simple to change. In HAWKS, we just maintain a list of tuples, denoting the start and end indices for each cluster. We could just create this at the start, and pass this object to our function and use that instead, but to minimize code and variables I&rsquo;m making the cluster sizes equal. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+    </div>
+
+    
+
+
+
+
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://sea-shunned.github.io/post/silhouette_partial/&amp;text=Silhouette%20width%20partial%20computation" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Silhouette%20width%20partial%20computation&amp;body=https://sea-shunned.github.io/post/silhouette_partial/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://sea-shunned.github.io/post/silhouette_partial/&amp;title=Silhouette%20width%20partial%20computation" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=Silhouette%20width%20partial%20computation%20https://sea-shunned.github.io/post/silhouette_partial/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://reddit.com/submit?url=https://sea-shunned.github.io/post/silhouette_partial/&amp;title=Silhouette%20width%20partial%20computation" target="_blank" rel="noopener" class="share-btn-reddit">
+          <i class="fab fa-reddit-alien"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_hu6b952c5b9a9a8ab9ed42a71878fec57b_740678_250x250_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://sea-shunned.github.io/">Cameron Shand</a></h5>
+      <h6 class="card-subtitle">PhD in Machine Learning &amp; Evolutionary Computation</h6>
+      <p class="card-text">My research interests include (primarily unsupervised) machine learning, evolutionary computation, and the role of synthetic data.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:cameron.shand@manchester.ac.uk" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/sea-shunned" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://scholar.google.co.uk/citations?user=rnUquyoAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+        <i class="ai ai-google-scholar"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/cwbshand" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/cameronshand/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js" integrity="sha256-1zu+3BnLYV9LdiY85uXMzii3bdrkelyp37e0ZyTAQh0=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/python.min.js"></script>
+        
+      
+
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script src="/js/academic.min.e5c8525332f417fe3589df9a6b25b6c4.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

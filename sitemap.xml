@@ -3,6 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://sea-shunned.github.io/</loc>
+    <lastmod>2020-03-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://sea-shunned.github.io/post/</loc>
+    <lastmod>2020-03-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://sea-shunned.github.io/post/silhouette_partial/</loc>
+    <lastmod>2020-03-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://sea-shunned.github.io/post/jsd_gaussians/</loc>
+    <lastmod>2020-02-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://sea-shunned.github.io/authors/cameron-shand/</loc>
     <lastmod>2019-07-27T00:00:00+00:00</lastmod>
   </url>
@@ -14,11 +34,6 @@
   
   <url>
     <loc>https://sea-shunned.github.io/authors/</loc>
-    <lastmod>2019-07-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://sea-shunned.github.io/</loc>
     <lastmod>2019-07-27T00:00:00+00:00</lastmod>
   </url>
   
@@ -65,10 +80,6 @@
   
   <url>
     <loc>https://sea-shunned.github.io/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>https://sea-shunned.github.io/post/</loc>
   </url>
   
   <url>
