@@ -1,0 +1,88 @@
+\documentclass[tikz, border={0.75cm 0.5cm 0.75cm 0.5cm}]{standalone}
+
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes, calc, fit, backgrounds}
+
+
+\definecolor{acolours}{HTML}{0459D1}
+\definecolor{bcolours}{HTML}{d15c04}
+
+\begin{document}
+
+\tikzset{every picture/.style={line width=0.8pt}}
+
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+
+\tikzstyle{datapoint}=[draw=black,line width=0.25pt,fill=black!50]
+\tikzstyle{sameclust}=[acolours, line width=1.4pt]
+
+\def\circlesize{0.11}
+
+\begin{tikzpicture}
+
+\begin{scope}[shift={(2.65,4.5)}]
+    \node[scale=0.65]{3.~Calculate all inter-cluster distances};
+\end{scope}
+
+\begin{scope}[rotate=-30]
+\node[circle, draw, color=black, fill=black, text=white, inner sep=0.75pt] (special) at (2.3,2.6) {\small $i$};
+
+\edef\clusterone{}
+\foreach \point [count=\i] in {(0,0.1),(0.3,0.25),(0.5,0.7),(0.7,-0.1)} {
+    \def\this{clust1-\i}
+    \node[coordinate] (\this) at \point {} ;
+    \begin{scope}[on background layer]
+        \draw[bcolours, dashed, line width=0.8pt] (special) -- (\this);
+    \end{scope}
+    \fill[datapoint] (\this) circle (\circlesize) ;
+    \xdef\clusterone{(\this) \clusterone}
+}
+
+\edef\clusterthree{}
+\foreach \point [count=\i] in {(-0.2,2.8),(-0.5,2.6),(-0.1,2.4)} {
+    \def\this{clust3-\i}
+    \node[coordinate] (\this) at \point {} ;
+    \begin{scope}[on background layer]
+        \draw[bcolours, dashed, line width=0.8pt] (special) -- (\this);
+    \end{scope}
+    \fill[datapoint] (\this) circle (\circlesize) ;
+    \xdef\clusterthree{(\this) \clusterthree}
+}
+
+\edef\clusterfour{}
+\foreach \point [count=\i] in {(2.3,5),(2.7,5.3),(2.8,5.9),(2.65,5.6), (2.1,5.3)} {
+    \def\this{clust4-\i}
+    \node[coordinate] (\this) at \point {} ;
+    \begin{scope}[on background layer]
+        \draw[bcolours, dashed, line width=0.8pt] (special) -- (\this);
+    \end{scope}
+    \fill[datapoint] (\this) circle (\circlesize) ;
+    \xdef\clusterfour{(\this) \clusterfour}
+}
+
+\edef\clustertwo{}
+\foreach \point [count=\i] in {(2,3),(1.75,2.35),(2.8,2.8),(2.4,2.2)} {
+    \def\this{clust2-\i}
+    \node[coordinate] (\this) at \point {} ;
+    \begin{scope}[on background layer]
+        \draw[sameclust] (special) -- (\this);
+    \end{scope}
+    \fill[datapoint, fill=black] (\this) circle (\circlesize) ;
+    \xdef\clustertwo{(\this) \clustertwo}
+}
+\end{scope}
+
+\begin{scope}[shift={(3,-1.25)}]
+    \node[scale=1]{$s(i) = \frac{\textcolor{bcolours}{b(i)} - \textcolor{acolours}{a(i)}}{\max \{\textcolor{acolours}{a(i)}, \textcolor{bcolours}{b(i)}\}}$};
+\end{scope}
+\end{tikzpicture}
+
+\end{document}
