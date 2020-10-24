@@ -1,449 +1,415 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts | Cameron Shand</title>
-    <link>https://sea-shunned.github.io/post/</link>
-      <atom:link href="https://sea-shunned.github.io/post/index.xml" rel="self" type="application/rss+xml" />
-    <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 08 Mar 2020 00:00:00 +0000</lastBuildDate>
-    <image>
-      <url>https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png</url>
-      <title>Posts</title>
-      <link>https://sea-shunned.github.io/post/</link>
-    </image>
-    
-    <item>
-      <title>Silhouette width partial computation</title>
-      <link>https://sea-shunned.github.io/post/silhouette_partial/</link>
-      <pubDate>Sun, 08 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>https://sea-shunned.github.io/post/silhouette_partial/</guid>
-      <description>&lt;!-- &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
-  MathJax.Hub.Config({ TeX: { extensions: [&#34;color.js&#34;] }});
-&lt;/script&gt; --&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts | Cameron Shand</title><link>https://sea-shunned.github.io/post/</link><atom:link href="https://sea-shunned.github.io/post/index.xml" rel="self" type="application/rss+xml"/><description>Posts</description><generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 08 Mar 2020 00:00:00 +0000</lastBuildDate><image><url>https://sea-shunned.github.io/images/icon_hu497b99186c2b6e9ecc609d324521c6d3_45450_512x512_fill_lanczos_center_2.png</url><title>Posts</title><link>https://sea-shunned.github.io/post/</link></image><item><title>Silhouette width partial computation</title><link>https://sea-shunned.github.io/post/silhouette_partial/</link><pubDate>Sun, 08 Mar 2020 00:00:00 +0000</pubDate><guid>https://sea-shunned.github.io/post/silhouette_partial/</guid><description>&lt;!-- &lt;script type="text/x-mathjax-config">
+MathJax.Hub.Config({ TeX: { extensions: ["color.js"] }});
+&lt;/script> -->
 &lt;!-- \definecolor{acolours}{HTML}{0459D1}
-\definecolor{bcolours}{HTML}{d15c04} --&gt;
-&lt;h2&gt;Table of Contents&lt;/h2&gt;
-&lt;nav id=&#34;TableOfContents&#34;&gt;
-  &lt;ol&gt;
-    &lt;li&gt;&lt;a href=&#34;#summary&#34;&gt;Summary&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&#34;#definition-of-the-silhouette-width&#34;&gt;Definition of the silhouette width&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a href=&#34;#calculating-the-silhouette-width&#34;&gt;Calculating the silhouette width&lt;/a&gt;
-      &lt;ol&gt;
-        &lt;li&gt;&lt;a href=&#34;#full-calculation&#34;&gt;Full calculation&lt;/a&gt;&lt;/li&gt;
-        &lt;li&gt;&lt;a href=&#34;#partial-calculation&#34;&gt;Partial calculation&lt;/a&gt;&lt;/li&gt;
-      &lt;/ol&gt;
-    &lt;/li&gt;
-    &lt;li&gt;&lt;a href=&#34;#comparison&#34;&gt;Comparison&lt;/a&gt;
-      &lt;ol&gt;
-        &lt;li&gt;&lt;a href=&#34;#results&#34;&gt;Results&lt;/a&gt;&lt;/li&gt;
-      &lt;/ol&gt;
-    &lt;/li&gt;
-    &lt;li&gt;&lt;a href=&#34;#full-code&#34;&gt;Full code&lt;/a&gt;&lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/nav&gt;
-&lt;h1 id=&#34;summary&#34;&gt;Summary&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#summary&#34;&gt;Summary&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#definition-of-the-silhouette-width&#34;&gt;Definition of the silhouette width&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#calculating-the-silhouette-width&#34;&gt;Calculating the silhouette width&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#full-calculation&#34;&gt;Full calculation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#partial-calculation&#34;&gt;Partial calculation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#comparison&#34;&gt;Comparison&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#results&#34;&gt;Results&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#full-code&#34;&gt;Full code&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;The silhouette width is an &lt;a href=&#34;https://doi.org/10.1016/j.patcog.2012.07.021&#34;&gt;internal cluster validity index&lt;/a&gt; that was first proposed in Rousseeuw (1987)&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. It uses the average intra-cluster distances and inter-cluster separation to indicate whether a data point (or object) is likely to be in the right cluster. This has the utility of providing a number in the range $[-1,1]$, where a positive value indicates that a point is likely to have been assigned to the right cluster (as it is on average closer to the other points in its cluster than to any other cluster).&lt;/p&gt;
-&lt;p&gt;One issue with the silhouette width is its complexity - $O(DN^{2})$, where $D$ is the dimensionality and $N$ is the number of data points. One useful property we can exploit to reduce the computation needed is that the majority of the pairwise distances (which are used in the silhouette width) are unlikely to change following a small perturbation to the data.&lt;/p&gt;
-&lt;p&gt;An application for the partial computation is in my synthetic cluster generator, &lt;a href=&#34;https://hawks.readthedocs.io/&#34;&gt;HAWKS&lt;/a&gt;, where it is used as the fitness function. As the core of HAWKS is a genetic algorithm, we have a population of individuals (datasets), and so the silhouette width needs to be calculated for each individual in the population every generation. Needless to say, this has the potential to make the evolution &lt;em&gt;very&lt;/em&gt; slow. Fortunately, changes in the individuals are caused by &lt;a href=&#34;https://www.obitko.com/tutorials/genetic-algorithms/operators.php&#34;&gt;crossover and mutation&lt;/a&gt; only. Neither of these operators are guaranteed to occur, and they operate on a subset of the clusters, thus changing only a subset of the pairwise distances.&lt;/p&gt;
-&lt;p&gt;Another potential application is when using the silhouette width for &lt;a href=&#34;https://dl.acm.org/doi/abs/10.1145/2522968.2522981&#34;&gt;data stream clustering&lt;/a&gt;, an area of research of increasing prevalence. For some situations, there may be minor changes to the dataset, either through the modification of a subset of the data, or through the introduction of a small (relative to the overall size) number of data points.&lt;/p&gt;
-&lt;p&gt;This post will explain the silhouette width, how it is typically calculated, and how we can utilize this partial computation to reduce computation.&lt;/p&gt;
-&lt;h1 id=&#34;definition-of-the-silhouette-width&#34;&gt;Definition of the silhouette width&lt;/h1&gt;
-&lt;p&gt;The silhouette width is calculated for a single data point (or object), $i$, and is defined as follows:&lt;/p&gt;
-&lt;p&gt;$$
+\definecolor{bcolours}{HTML}{d15c04} -->
+&lt;h2>Table of Contents&lt;/h2>
+&lt;nav id="TableOfContents">
+&lt;ol>
+&lt;li>&lt;a href="#summary">Summary&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#introduction">Introduction&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#definition-of-the-silhouette-width">Definition of the silhouette width&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#calculating-the-silhouette-width">Calculating the silhouette width&lt;/a>
+&lt;ol>
+&lt;li>&lt;a href="#full-calculation">Full calculation&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#partial-calculation">Partial calculation&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>&lt;a href="#comparison">Comparison&lt;/a>
+&lt;ol>
+&lt;li>&lt;a href="#results">Results&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;/li>
+&lt;li>&lt;a href="#full-code">Full code&lt;/a>&lt;/li>
+&lt;/ol>
+&lt;/nav>
+&lt;h1 id="summary">Summary&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a href="#summary">Summary&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#introduction">Introduction&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#definition-of-the-silhouette-width">Definition of the silhouette width&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#calculating-the-silhouette-width">Calculating the silhouette width&lt;/a>
+&lt;ul>
+&lt;li>&lt;a href="#full-calculation">Full calculation&lt;/a>&lt;/li>
+&lt;li>&lt;a href="#partial-calculation">Partial calculation&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;a href="#comparison">Comparison&lt;/a>
+&lt;ul>
+&lt;li>&lt;a href="#results">Results&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;a href="#full-code">Full code&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h1 id="introduction">Introduction&lt;/h1>
+&lt;p>The silhouette width is an &lt;a href="https://doi.org/10.1016/j.patcog.2012.07.021">internal cluster validity index&lt;/a> that was first proposed in Rousseeuw (1987)&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>. It uses the average intra-cluster distances and inter-cluster separation to indicate whether a data point (or object) is likely to be in the right cluster. This has the utility of providing a number in the range $[-1,1]$, where a positive value indicates that a point is likely to have been assigned to the right cluster (as it is on average closer to the other points in its cluster than to any other cluster).&lt;/p>
+&lt;p>One issue with the silhouette width is its complexity - $O(DN^{2})$, where $D$ is the dimensionality and $N$ is the number of data points. One useful property we can exploit to reduce the computation needed is that the majority of the pairwise distances (which are used in the silhouette width) are unlikely to change following a small perturbation to the data.&lt;/p>
+&lt;p>An application for the partial computation is in my synthetic cluster generator, &lt;a href="https://hawks.readthedocs.io/">HAWKS&lt;/a>, where it is used as the fitness function. As the core of HAWKS is a genetic algorithm, we have a population of individuals (datasets), and so the silhouette width needs to be calculated for each individual in the population every generation. Needless to say, this has the potential to make the evolution &lt;em>very&lt;/em> slow. Fortunately, changes in the individuals are caused by &lt;a href="https://www.obitko.com/tutorials/genetic-algorithms/operators.php">crossover and mutation&lt;/a> only. Neither of these operators are guaranteed to occur, and they operate on a subset of the clusters, thus changing only a subset of the pairwise distances.&lt;/p>
+&lt;p>Another potential application is when using the silhouette width for &lt;a href="https://dl.acm.org/doi/abs/10.1145/2522968.2522981">data stream clustering&lt;/a>, an area of research of increasing prevalence. For some situations, there may be minor changes to the dataset, either through the modification of a subset of the data, or through the introduction of a small (relative to the overall size) number of data points.&lt;/p>
+&lt;p>This post will explain the silhouette width, how it is typically calculated, and how we can utilize this partial computation to reduce computation.&lt;/p>
+&lt;h1 id="definition-of-the-silhouette-width">Definition of the silhouette width&lt;/h1>
+&lt;p>The silhouette width is calculated for a single data point (or object), $i$, and is defined as follows:&lt;/p>
+&lt;p>$$
 s(i) = \frac{{b(i)} - a(i)}{\max\{a(i),b(i)\}}
-$$&lt;/p&gt;
-&lt;p&gt;where $a(i)$ represents the cluster compactness (with respect to object $i$) and $b(i)$ represents minimum average separation from $i$ to another cluster. The standardisation achieved by the denominator term keeps $s(i)$ in the range $[-1,1]$. For $a(i)$, we calculate the average distance from $i$ to all other objects in its cluster:&lt;/p&gt;
-&lt;p&gt;$$
+$$&lt;/p>
+&lt;p>where $a(i)$ represents the cluster compactness (with respect to object $i$) and $b(i)$ represents minimum average separation from $i$ to another cluster. The standardisation achieved by the denominator term keeps $s(i)$ in the range $[-1,1]$. For $a(i)$, we calculate the average distance from $i$ to all other objects in its cluster:&lt;/p>
+&lt;p>$$
 a(i) = \frac{\sum_{j\in C_{k}}~d{(i,j)}}{| C_{k} | - 1} \qquad ~i\neq j;~i \in C_{k};~C_{k} \in \mathcal{C}
-$$&lt;/p&gt;
-&lt;p&gt;where $\left | C_{k} \right |$ is the $k$th cluster&amp;rsquo;s cardinality, $\mathcal{C} = \{C_{1},\ldots,C_{K}\}$ is the set of $K$ clusters, and $d{(i,j)}$ is the distance (typically Euclidean) between objects $i$ and $j$. We divide by $| C_{k} | - 1$ as $d(i,i)$ is not included.&lt;/p&gt;
-&lt;p&gt;We then calculate $b(i)$ as:&lt;/p&gt;
-&lt;p&gt;$$
+$$&lt;/p>
+&lt;p>where $\left | C_{k} \right |$ is the $k$th cluster&amp;rsquo;s cardinality, $\mathcal{C} = \{C_{1},\ldots,C_{K}\}$ is the set of $K$ clusters, and $d{(i,j)}$ is the distance (typically Euclidean) between objects $i$ and $j$. We divide by $| C_{k} | - 1$ as $d(i,i)$ is not included.&lt;/p>
+&lt;p>We then calculate $b(i)$ as:&lt;/p>
+&lt;p>$$
 b(i) = \min_{\forall C_{k} \in \mathcal{C}} \frac{\sum_{j\in C_{k}}~d{(i,j)}}{\left | C_{k} \right |} \qquad ~i \notin C_{k}.
-$$&lt;/p&gt;
-&lt;p&gt;Note that the silhouette width for a singleton cluster (i.e. $|C_{k}|=1$ and $i \in C_{k}$) is defined as $s(i) = 0$.&lt;/p&gt;
-&lt;p&gt;The different parts of this equation and how they relate can be seen in the following GIF:&lt;/p&gt;
-&lt;!-- ![Animated silhouette width calculation](/img/sw-gif.gif) --&gt;
-&lt;img class=&#34;special-img-class&#34; width=&#34;90%&#34; src=&#34;https://sea-shunned.github.io/img/sw-gif.gif&#34; id=&#34;sw_gif&#34;&gt;
-&lt;p&gt;To get the average silhouette width for the dataset, $s_{\text{all}},$&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; we then take the average $s(i)$ across all $N$ data points:&lt;/p&gt;
-&lt;p&gt;$$
+$$&lt;/p>
+&lt;p>Note that the silhouette width for a singleton cluster (i.e. $|C_{k}|=1$ and $i \in C_{k}$) is defined as $s(i) = 0$.&lt;/p>
+&lt;p>The different parts of this equation and how they relate can be seen in the following GIF:&lt;/p>
+&lt;!-- ![Animated silhouette width calculation](/img/sw-gif.gif) -->
+&lt;img class="special-img-class" width="90%" src="https://sea-shunned.github.io/img/sw-gif.gif" id="sw_gif">
+&lt;p>To get the average silhouette width for the dataset, $s_{\text{all}},$&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup> we then take the average $s(i)$ across all $N$ data points:&lt;/p>
+&lt;p>$$
 s_{\text{all}} = \frac{1}{N} \sum_{i=1}^{N} s(i).
-$$&lt;/p&gt;
-&lt;h1 id=&#34;calculating-the-silhouette-width&#34;&gt;Calculating the silhouette width&lt;/h1&gt;
-&lt;p&gt;In this section I&amp;rsquo;ll go over the full and then a reduced computation version of the silhouette width. You can skip to the &lt;a href=&#34;#full-code&#34;&gt;full code&lt;/a&gt;, or see it implemented in HAWKS &lt;a href=&#34;https://github.com/sea-shunned/hawks/blob/master/hawks/objectives.py&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;full-calculation&#34;&gt;Full calculation&lt;/h2&gt;
-&lt;p&gt;I&amp;rsquo;ll show how we can compute this in &lt;code&gt;numpy&lt;/code&gt;/&lt;code&gt;scipy&lt;/code&gt;, though there is an implementation available in &lt;code&gt;sklearn&lt;/code&gt; &lt;a href=&#34;https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html&#34;&gt;here&lt;/a&gt;. Note that I&amp;rsquo;ve tried to make the implementation shorter by just making every cluster the same size.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s assume we have a small dataset of $N=9$ and $K=3$, where each cluster contains three objects. The distance matrix (pairwise distances between all points) is a $N \times N$ symmetric matrix, with 0 on the diagonal (as the distance between a point and itself is 0). The blocks below show which part of the distance matrix corresponds to the different parts of the silhouette width calculation. For our purposes, the objects that belong in the same cluster are contiguous in the distance matrix, though thanks to &lt;code&gt;numpy&lt;/code&gt; this isn&amp;rsquo;t a requirement.&lt;/p&gt;
-&lt;img class=&#34;special-img-class&#34; width=&#34;90%&#34; src=&#34;https://sea-shunned.github.io/img/sw_matrix.svg&#34; id=&#34;sw_matrix&#34;&gt;
-&lt;p&gt;Calculating the pairwise distances is simple enough, thanks to &lt;code&gt;scipy&lt;/code&gt;. One thing to note is that &lt;code&gt;scipy&lt;/code&gt; uses a vector-form distance vector, rather than a full distance matrix, which would be more appropriate as $N$ grows. Using &lt;code&gt;squareform&lt;/code&gt; with &lt;code&gt;pdist&lt;/code&gt; slows things down, but it can be more intuitive to work with full distance matrices, so we&amp;rsquo;ll do that here. For details, see &lt;a href=&#34;https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.squareform.html&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Initial imports
+$$&lt;/p>
+&lt;h1 id="calculating-the-silhouette-width">Calculating the silhouette width&lt;/h1>
+&lt;p>In this section I&amp;rsquo;ll go over the full and then a reduced computation version of the silhouette width. You can skip to the &lt;a href="#full-code">full code&lt;/a>, or see it implemented in HAWKS &lt;a href="https://github.com/sea-shunned/hawks/blob/master/hawks/objectives.py">here&lt;/a>.&lt;/p>
+&lt;h2 id="full-calculation">Full calculation&lt;/h2>
+&lt;p>I&amp;rsquo;ll show how we can compute this in &lt;code>numpy&lt;/code>/&lt;code>scipy&lt;/code>, though there is an implementation available in &lt;code>sklearn&lt;/code> &lt;a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html">here&lt;/a>. Note that I&amp;rsquo;ve tried to make the implementation shorter by just making every cluster the same size.&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>&lt;/p>
+&lt;p>Let&amp;rsquo;s assume we have a small dataset of $N=9$ and $K=3$, where each cluster contains three objects. The distance matrix (pairwise distances between all points) is a $N \times N$ symmetric matrix, with 0 on the diagonal (as the distance between a point and itself is 0). The blocks below show which part of the distance matrix corresponds to the different parts of the silhouette width calculation. For our purposes, the objects that belong in the same cluster are contiguous in the distance matrix, though thanks to &lt;code>numpy&lt;/code> this isn&amp;rsquo;t a requirement.&lt;/p>
+&lt;img class="special-img-class" width="90%" src="https://sea-shunned.github.io/img/sw_matrix.svg" id="sw_matrix">
+&lt;p>Calculating the pairwise distances is simple enough, thanks to &lt;code>scipy&lt;/code>. One thing to note is that &lt;code>scipy&lt;/code> uses a vector-form distance vector, rather than a full distance matrix, which would be more appropriate as $N$ grows. Using &lt;code>squareform&lt;/code> with &lt;code>pdist&lt;/code> slows things down, but it can be more intuitive to work with full distance matrices, so we&amp;rsquo;ll do that here. For details, see &lt;a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.squareform.html">here&lt;/a>.&lt;/p>
+&lt;pre>&lt;code class="language-python"># Initial imports
 from itertools import permutations
 from collections import defaultdict
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
-
 def full_distances(data, metric=&amp;quot;sqeuclidean&amp;quot;):
-    return squareform(pdist(data, metric=metric))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;For efficiency, we calculate $s(i)$ for every $i$ simultaneously. We start with $a(i)$, or the intra-cluster distances. Here, we select each of the relevant blocks on the diagonal of the distance matrix (as previously shown), then divide the sum of these distances by the cardinality (i.e. size) of the cluster.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def full_intraclusts(dists, N, cluster_size):
-    # Calculate the intracluster variance
-    a_vals = np.zeros((N,))
-    # Loop over each cluster (exploit equal size)
-    for start in range(0, N, cluster_size):
-        # Get the final index for that cluster
-        stop = start+cluster_size
-        # Get the relevant part of the dist array
-        clust_array = dists[start:stop, start:stop]
-        # Divide by the cardinality
-        a_vals[start:stop] = np.true_divide(
-            np.sum(clust_array, axis=0),
-            stop-start-1 # As we don&#39;t include d(i,i)
-        )
-    return a_vals
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Calculating the minimum inter-cluster distances, $b(i)$, is slightly trickier. We need to calculate, for each data point, the average distance to every point in every other cluster, and then select the minimum of these averages. To get all the 2-tuple permutations of the clusters, we use &lt;code&gt;itertools.permutations&lt;/code&gt;. We initialize the $b(i)$ values vector to &lt;code&gt;np.inf&lt;/code&gt; so that if anything is unfilled, we&amp;rsquo;ll get a warning later on. We could just use a single vector (of length $N$) for &lt;code&gt;b_vals&lt;/code&gt;, keeping the minimum as we iterate over each cluster. Here, however, we are using a $N \times K$ matrix instead, as this is more useful later on in the partial calculation.&lt;/p&gt;
-&lt;p&gt;For each cluster, we calculate the relevant indices to get the appropriate submatrix of the distance matrix. Then, we just calculate the mean distances to that cluster and store it in the column for that cluster. We can then later select the minimum from the $K$ columns.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def full_interclusts(dists, N, K, cluster_size):
-    # Calculate the intercluster variance
-    # Get the permutations of cluster numbers
-    perms = permutations(range(K), 2)
-    # Initialize the b_values
-    # Default to np.inf so we get a warning if it doesn&#39;t work
-    b_vals = np.full((N, K), np.inf)
-    # Calc each intercluster dist
-    for c1, c2 in perms:
-        # Get indices for distance array
-        c1_start = c1*cluster_size
-        c1_stop = c1_start+cluster_size
-        c2_start = c2*cluster_size
-        c2_stop = c2_start+cluster_size
-        # Get the relevant part of the dist array
-        clust_array = dists[c1_start:c1_stop, c2_start:c2_stop]
-        # Select the minimum average distance
-        b_vals[c1_start:c1_stop, c2] = np.mean(clust_array, axis=1)
-    return b_vals
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Putting it all together, we can calculate the silhouette width as follows:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def full_silh(data, N, cluster_size, K):
-    # Get the distances
-    dists = full_distances(data)
-    # Calculate the main terms
-    a_vals = full_intraclusts(dists, N, cluster_size)
-    b_vals = full_interclusts(dists, N, K, cluster_size)
-    # Select the minimum average distance
-    b_vec = b_vals.min(1)
-    # Calculate the numerator and denominator
-    top_term = b_vec - a_vals
-    bottom_term = np.maximum(b_vec, a_vals)
-    res = top_term / bottom_term
-    # Handle singleton clusters
-    res = np.nan_to_num(res)
-    return np.mean(res), dists, a_vals, b_vals
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Let&amp;rsquo;s validate that our method of calculating works:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def test_full():
-    # Set random seed
-    np.random.seed(42)
-    # Setup variables
-    N, D, K = 1000, 2, 10
-    cluster_size = int(N/K)
-    data, labels = random_data(cluster_size, D, K)
-    # Calculate the silhouette widths
-    our_sw = full_silh(data, N, cluster_size, K)
-    sk_sw = silhouette_score(data, labels, metric=&#39;sqeuclidean&#39;)
-    print(f&amp;quot;Our method:   {our_sw}&amp;quot;)
-    print(f&amp;quot;Scikit-learn: {sk_sw}&amp;quot;)
-    assert np.isclose(our_sw, sk_sw)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;Our method:   0.8039652717646208
+return squareform(pdist(data, metric=metric))
+&lt;/code>&lt;/pre>
+&lt;p>For efficiency, we calculate $s(i)$ for every $i$ simultaneously. We start with $a(i)$, or the intra-cluster distances. Here, we select each of the relevant blocks on the diagonal of the distance matrix (as previously shown), then divide the sum of these distances by the cardinality (i.e. size) of the cluster.&lt;/p>
+&lt;pre>&lt;code class="language-python">def full_intraclusts(dists, N, cluster_size):
+# Calculate the intracluster variance
+a_vals = np.zeros((N,))
+# Loop over each cluster (exploit equal size)
+for start in range(0, N, cluster_size):
+# Get the final index for that cluster
+stop = start+cluster_size
+# Get the relevant part of the dist array
+clust_array = dists[start:stop, start:stop]
+# Divide by the cardinality
+a_vals[start:stop] = np.true_divide(
+np.sum(clust_array, axis=0),
+stop-start-1 # As we don't include d(i,i)
+)
+return a_vals
+&lt;/code>&lt;/pre>
+&lt;p>Calculating the minimum inter-cluster distances, $b(i)$, is slightly trickier. We need to calculate, for each data point, the average distance to every point in every other cluster, and then select the minimum of these averages. To get all the 2-tuple permutations of the clusters, we use &lt;code>itertools.permutations&lt;/code>. We initialize the $b(i)$ values vector to &lt;code>np.inf&lt;/code> so that if anything is unfilled, we&amp;rsquo;ll get a warning later on. We could just use a single vector (of length $N$) for &lt;code>b_vals&lt;/code>, keeping the minimum as we iterate over each cluster. Here, however, we are using a $N \times K$ matrix instead, as this is more useful later on in the partial calculation.&lt;/p>
+&lt;p>For each cluster, we calculate the relevant indices to get the appropriate submatrix of the distance matrix. Then, we just calculate the mean distances to that cluster and store it in the column for that cluster. We can then later select the minimum from the $K$ columns.&lt;/p>
+&lt;pre>&lt;code class="language-python">def full_interclusts(dists, N, K, cluster_size):
+# Calculate the intercluster variance
+# Get the permutations of cluster numbers
+perms = permutations(range(K), 2)
+# Initialize the b_values
+# Default to np.inf so we get a warning if it doesn't work
+b_vals = np.full((N, K), np.inf)
+# Calc each intercluster dist
+for c1, c2 in perms:
+# Get indices for distance array
+c1_start = c1*cluster_size
+c1_stop = c1_start+cluster_size
+c2_start = c2*cluster_size
+c2_stop = c2_start+cluster_size
+# Get the relevant part of the dist array
+clust_array = dists[c1_start:c1_stop, c2_start:c2_stop]
+# Select the minimum average distance
+b_vals[c1_start:c1_stop, c2] = np.mean(clust_array, axis=1)
+return b_vals
+&lt;/code>&lt;/pre>
+&lt;p>Putting it all together, we can calculate the silhouette width as follows:&lt;/p>
+&lt;pre>&lt;code class="language-python">def full_silh(data, N, cluster_size, K):
+# Get the distances
+dists = full_distances(data)
+# Calculate the main terms
+a_vals = full_intraclusts(dists, N, cluster_size)
+b_vals = full_interclusts(dists, N, K, cluster_size)
+# Select the minimum average distance
+b_vec = b_vals.min(1)
+# Calculate the numerator and denominator
+top_term = b_vec - a_vals
+bottom_term = np.maximum(b_vec, a_vals)
+res = top_term / bottom_term
+# Handle singleton clusters
+res = np.nan_to_num(res)
+return np.mean(res), dists, a_vals, b_vals
+&lt;/code>&lt;/pre>
+&lt;p>Let&amp;rsquo;s validate that our method of calculating works:&lt;/p>
+&lt;pre>&lt;code class="language-python">def test_full():
+# Set random seed
+np.random.seed(42)
+# Setup variables
+N, D, K = 1000, 2, 10
+cluster_size = int(N/K)
+data, labels = random_data(cluster_size, D, K)
+# Calculate the silhouette widths
+our_sw = full_silh(data, N, cluster_size, K)
+sk_sw = silhouette_score(data, labels, metric='sqeuclidean')
+print(f&amp;quot;Our method: {our_sw}&amp;quot;)
+print(f&amp;quot;Scikit-learn: {sk_sw}&amp;quot;)
+assert np.isclose(our_sw, sk_sw)
+&lt;/code>&lt;/pre>
+&lt;pre>&lt;code class="language-bash">Our method: 0.8039652717646208
 Scikit-learn: 0.8039652717646208
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Fortunately, we get the same as &lt;code&gt;sklearn&lt;/code&gt;, so assuming we don&amp;rsquo;t both have the &lt;em&gt;exact same bug&lt;/em&gt; we can move on.&lt;/p&gt;
-&lt;h2 id=&#34;partial-calculation&#34;&gt;Partial calculation&lt;/h2&gt;
-&lt;p&gt;Now we can look at refining this so that we only recompute what is needed, following a partial change in the data. When a single cluster changes, the pairwise distances in corresponding rows/columns for those data points in the distance matrix also change. Therefore, only the $a(i)$ values in the clusters that change need to be recomputed, and the cluster combinations in $b(i)$ which include a modified cluster (this is where storing all $K$ values for each data point in &lt;code&gt;b_vals&lt;/code&gt; pays off).&lt;/p&gt;
-&lt;p&gt;In our scenario, the cluster change results from a perturbation (from crossover or mutation), and so we know which clusters have changed. Therefore, we know which subsets of the distance matrix need recomputation, which we can do as follows:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def partial_distances(data, dists, cluster_size, changed_clusters, metric=&amp;quot;sqeuclidean&amp;quot;):
-    for i, changed in enumerate(changed_clusters):
-        # Skip if unchanged
-        if not changed:
-            continue
-        # Get the indices for the cluster
-        start = i*cluster_size
-        stop = start+cluster_size
-        # Calculate the new block of pairwise matrices
-        new_dists = cdist(
-            data,
-            data[start:stop, :],
-            metric=metric
-        )
-        # Insert the new distances (in both as symmetric)
-        dists[:, start:stop] = new_dists
-        dists[start:stop, :] = new_dists.T
-    return dists
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The actual functions for the calculation $a(i)$ is mostly identical, but the list of clusters that have changed is used to skip the clusters that don&amp;rsquo;t require recalculation:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def partial_intraclusts(a_vals, dists, N, cluster_size, changed_list):
-    # Loop over each cluster (exploit equal size)
-    for clust_num, changed in enumerate(changed_list):
-        if not changed:
-            continue
-        # Get the indices for the cluster
-        start = cluster_size * clust_num
-        stop = start + cluster_size
-        # Get the relevant part of the dist array
-        clust_array = dists[start:stop, start:stop]
-        # Divide by the cardinality
-        a_vals[start:stop] = np.true_divide(
-            np.sum(clust_array, axis=0),
-            stop-start-1 # As we don&#39;t include d(i,i)
-        )
-    return a_vals
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;For the $b(i)$ values, a change in any single cluster requires some recalculation for every other cluster, but only a subset of the possible combinations need to be done. For example, in the &lt;a href=&#34;#sw_matrix_changed&#34;&gt;annotated distance matrix&lt;/a&gt; below we can see that if $C_{3}$ were changed, anything that involves $C_{3}$ needs recalculation to see if there is a new minimum.&lt;/p&gt;
-&lt;img class=&#34;special-img-class&#34; width=&#34;90%&#34; src=&#34;https://sea-shunned.github.io/img/sw_matrix_changed.svg&#34; id=&#34;sw_matrix_changed&#34;&gt;
-&lt;p&gt;So, for each cluster that has changed, we can loop over every &lt;em&gt;other&lt;/em&gt; cluster and then update the relevant parts of the &lt;code&gt;b_vals&lt;/code&gt; matrix as shown below:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def partial_interclusts(b_vals, dists, K, cluster_size, changed_list):
-    # Loop over the clusters that have changed
-    for c1, changed in enumerate(changed_list):
-        if changed:
-            # Determine the relevant indices
-            c1_start = c1 * cluster_size
-            c1_stop = c1_start + cluster_size
-            # Loop over every other cluster
-            for c2 in range(K):
-                if c1 == c2:
-                    continue
-                # Get indices for distance array
-                c2_start = c2 * cluster_size
-                c2_stop = c2_start + cluster_size
-                # Get the relevant part of the dist array
-                clust_array = dists[c1_start:c1_stop, c2_start:c2_stop]
-                # Set the minimum average distance for the c1,c2 combo
-                b_vals[c1_start:c1_stop, c2] = np.mean(clust_array, axis=1)
-                # Set the minimum average distance for the c2,c1 combo
-                b_vals[c2_start:c2_stop, c1] = np.mean(clust_array, axis=0)
-    return b_vals
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Putting it all together, our overall function can enable both full and partial recomputation:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def partial_silh(data, N, cluster_size, K, changed_list=None, dists=None, a_vals=None, b_vals=None):
-    if changed_list is None:
-        changed_list = [True]*K
-    # Get the distances
-    if dists is None:
-        dists = full_distances(data)
-    else:
-        dists = partial_distances(data, dists, cluster_size, changed_list)
-    # Allows us to use this function for the first calc
-    if a_vals is None:
-        a_vals = np.zeros((N,))
-    if b_vals is None:
-        b_vals = np.full((N, K), np.inf)
-    # Calculate the main terms
-    a_vals = partial_intraclusts(a_vals, dists, N, cluster_size, changed_list)
-    b_vals = partial_interclusts(b_vals, dists, K, cluster_size, changed_list)
-    # Select the minimum average distance
-    b_vec = b_vals.min(1)
-    # Calculate the numerator and denominator
-    top_term = b_vec - a_vals
-    bottom_term = np.maximum(b_vec, a_vals)
-    res = top_term / bottom_term
-    # Handle singleton clusters
-    res = np.nan_to_num(res)
-    return np.mean(res), dists, a_vals, b_vals
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now let&amp;rsquo;s check that our new functions work by first calculating the full silhouette width, and then modifying two clusters and running it again using the partial computation.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def test_partial():
-    # Set random seed
-    np.random.seed(42)
-    # Setup variables
-    N, D, K = 1000, 2, 10
-    cluster_size = int(N/K)
-    data, labels = random_data(cluster_size, D, K)
-    changed_list = [True]*K
-    # Need to first do the full calculation
-    our_sw, dists, a_vals, b_vals = partial_silh(data, N, cluster_size, K, changed_list)
-    # Compare with the full scikit calc to check
-    sk_sw = silhouette_score(data, labels, metric=&#39;sqeuclidean&#39;)
-    assert np.isclose(our_sw, sk_sw)
-    # Drastically change the first cluster
-    data[:100] = np.random.multivariate_normal(
-        mean=[np.random.rand() * 1000 for _ in range(D)],
-        cov=np.eye(D),
-        size=cluster_size
-    )
-    # Drastically change the third cluster
-    data[200:300] = np.random.multivariate_normal(
-        mean=[np.random.rand() * 500 for _ in range(D)],
-        cov=np.eye(D),
-        size=cluster_size
-    )
-    # We changed the first and third cluster
-    changed_list = [True, False, True, False, False]
-    # Now partially recalculate the silhouette width
-    our_sw, _, _, _ = partial_silh(data, N, cluster_size, K, changed_list, dists, a_vals, b_vals)
-    sk_sw = silhouette_score(data, labels, metric=&#39;sqeuclidean&#39;)
-    print(f&amp;quot;Partial method: {our_sw}&amp;quot;)
-    print(f&amp;quot;Full method:    {full_silh(data, N, cluster_size, K)[0]}&amp;quot;)
-    print(f&amp;quot;Scikit-learn:   {sk_sw}&amp;quot;)
-    assert np.isclose(our_sw, sk_sw)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;Partial method: 0.8991699790956502
-Full method:    0.8991699790956502
-Scikit-learn:   0.8991699790956502
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Great! Now, we can look at whether all of this was actually worth it (in terms of computation, at least).&lt;/p&gt;
-&lt;h1 id=&#34;comparison&#34;&gt;Comparison&lt;/h1&gt;
-&lt;p&gt;To see if the partial calculation is worth it, we need to compare the run times between the full method, the partial method, and the &lt;code&gt;sklearn&lt;/code&gt; method when run first on the dataset, and then again after the data has been modified. By varying some different parameters, such as the proportion of clusters that are being changed, the size of the dataset ($N$) and the dimensionality ($D$), we will see if there is a point where the overhead of partial computation outweighs the savings. After all, matrix multiplications are &lt;em&gt;awfully&lt;/em&gt; efficient, and the overhead we have created with for loops is, well, potentially less efficient. If the proportion of clusters that change is large, it could quite reasonably be that restarting and calculating the full silhouette width is more efficient.&lt;/p&gt;
-&lt;!-- For simplicity, we will be using equally sized clusters, i.e. $|C_{1}| = |C_{2}| = \ldots = |C_{K}| = \frac{N}{K}$. This isn&#39;t a requirement, it just makes life easier and the code slightly shorter. --&gt;
-&lt;p&gt;To ensure a robust timing, each method is run 10 times, and the average time is taken. Here is the code for the experiment:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def random_data(cluster_size, D, K):
-    data_list = []
-    for k in range(K):
-        # Generate some random normal data
-        data = np.random.multivariate_normal(
-            mean=[np.random.rand() * 5 * k for _ in range(D)],
-            cov=np.eye(D),
-            size=cluster_size
-        )
-        # Append labels to the data
-        # Note that this is only needed for the partial computation
-        data = np.hstack((data, np.full((cluster_size, 1), k)))
-        # Add the data to our list
-        data_list.append(data)
-    # Create a single array of the data
-    full_data = np.concatenate(data_list)
-    labels = full_data[:, -1]
-    return full_data[:, :-1], labels
-
+&lt;/code>&lt;/pre>
+&lt;p>Fortunately, we get the same as &lt;code>sklearn&lt;/code>, so assuming we don&amp;rsquo;t both have the &lt;em>exact same bug&lt;/em> we can move on.&lt;/p>
+&lt;h2 id="partial-calculation">Partial calculation&lt;/h2>
+&lt;p>Now we can look at refining this so that we only recompute what is needed, following a partial change in the data. When a single cluster changes, the pairwise distances in corresponding rows/columns for those data points in the distance matrix also change. Therefore, only the $a(i)$ values in the clusters that change need to be recomputed, and the cluster combinations in $b(i)$ which include a modified cluster (this is where storing all $K$ values for each data point in &lt;code>b_vals&lt;/code> pays off).&lt;/p>
+&lt;p>In our scenario, the cluster change results from a perturbation (from crossover or mutation), and so we know which clusters have changed. Therefore, we know which subsets of the distance matrix need recomputation, which we can do as follows:&lt;/p>
+&lt;pre>&lt;code class="language-python">def partial_distances(data, dists, cluster_size, changed_clusters, metric=&amp;quot;sqeuclidean&amp;quot;):
+for i, changed in enumerate(changed_clusters):
+# Skip if unchanged
+if not changed:
+continue
+# Get the indices for the cluster
+start = i*cluster_size
+stop = start+cluster_size
+# Calculate the new block of pairwise matrices
+new_dists = cdist(
+data,
+data[start:stop, :],
+metric=metric
+)
+# Insert the new distances (in both as symmetric)
+dists[:, start:stop] = new_dists
+dists[start:stop, :] = new_dists.T
+return dists
+&lt;/code>&lt;/pre>
+&lt;p>The actual functions for the calculation $a(i)$ is mostly identical, but the list of clusters that have changed is used to skip the clusters that don&amp;rsquo;t require recalculation:&lt;/p>
+&lt;pre>&lt;code class="language-python">def partial_intraclusts(a_vals, dists, N, cluster_size, changed_list):
+# Loop over each cluster (exploit equal size)
+for clust_num, changed in enumerate(changed_list):
+if not changed:
+continue
+# Get the indices for the cluster
+start = cluster_size * clust_num
+stop = start + cluster_size
+# Get the relevant part of the dist array
+clust_array = dists[start:stop, start:stop]
+# Divide by the cardinality
+a_vals[start:stop] = np.true_divide(
+np.sum(clust_array, axis=0),
+stop-start-1 # As we don't include d(i,i)
+)
+return a_vals
+&lt;/code>&lt;/pre>
+&lt;p>For the $b(i)$ values, a change in any single cluster requires some recalculation for every other cluster, but only a subset of the possible combinations need to be done. For example, in the &lt;a href="#sw_matrix_changed">annotated distance matrix&lt;/a> below we can see that if $C_{3}$ were changed, anything that involves $C_{3}$ needs recalculation to see if there is a new minimum.&lt;/p>
+&lt;img class="special-img-class" width="90%" src="https://sea-shunned.github.io/img/sw_matrix_changed.svg" id="sw_matrix_changed">
+&lt;p>So, for each cluster that has changed, we can loop over every &lt;em>other&lt;/em> cluster and then update the relevant parts of the &lt;code>b_vals&lt;/code> matrix as shown below:&lt;/p>
+&lt;pre>&lt;code class="language-python">def partial_interclusts(b_vals, dists, K, cluster_size, changed_list):
+# Loop over the clusters that have changed
+for c1, changed in enumerate(changed_list):
+if changed:
+# Determine the relevant indices
+c1_start = c1 * cluster_size
+c1_stop = c1_start + cluster_size
+# Loop over every other cluster
+for c2 in range(K):
+if c1 == c2:
+continue
+# Get indices for distance array
+c2_start = c2 * cluster_size
+c2_stop = c2_start + cluster_size
+# Get the relevant part of the dist array
+clust_array = dists[c1_start:c1_stop, c2_start:c2_stop]
+# Set the minimum average distance for the c1,c2 combo
+b_vals[c1_start:c1_stop, c2] = np.mean(clust_array, axis=1)
+# Set the minimum average distance for the c2,c1 combo
+b_vals[c2_start:c2_stop, c1] = np.mean(clust_array, axis=0)
+return b_vals
+&lt;/code>&lt;/pre>
+&lt;p>Putting it all together, our overall function can enable both full and partial recomputation:&lt;/p>
+&lt;pre>&lt;code class="language-python">def partial_silh(data, N, cluster_size, K, changed_list=None, dists=None, a_vals=None, b_vals=None):
+if changed_list is None:
+changed_list = [True]*K
+# Get the distances
+if dists is None:
+dists = full_distances(data)
+else:
+dists = partial_distances(data, dists, cluster_size, changed_list)
+# Allows us to use this function for the first calc
+if a_vals is None:
+a_vals = np.zeros((N,))
+if b_vals is None:
+b_vals = np.full((N, K), np.inf)
+# Calculate the main terms
+a_vals = partial_intraclusts(a_vals, dists, N, cluster_size, changed_list)
+b_vals = partial_interclusts(b_vals, dists, K, cluster_size, changed_list)
+# Select the minimum average distance
+b_vec = b_vals.min(1)
+# Calculate the numerator and denominator
+top_term = b_vec - a_vals
+bottom_term = np.maximum(b_vec, a_vals)
+res = top_term / bottom_term
+# Handle singleton clusters
+res = np.nan_to_num(res)
+return np.mean(res), dists, a_vals, b_vals
+&lt;/code>&lt;/pre>
+&lt;p>Now let&amp;rsquo;s check that our new functions work by first calculating the full silhouette width, and then modifying two clusters and running it again using the partial computation.&lt;/p>
+&lt;pre>&lt;code class="language-python">def test_partial():
+# Set random seed
+np.random.seed(42)
+# Setup variables
+N, D, K = 1000, 2, 10
+cluster_size = int(N/K)
+data, labels = random_data(cluster_size, D, K)
+changed_list = [True]*K
+# Need to first do the full calculation
+our_sw, dists, a_vals, b_vals = partial_silh(data, N, cluster_size, K, changed_list)
+# Compare with the full scikit calc to check
+sk_sw = silhouette_score(data, labels, metric='sqeuclidean')
+assert np.isclose(our_sw, sk_sw)
+# Drastically change the first cluster
+data[:100] = np.random.multivariate_normal(
+mean=[np.random.rand() * 1000 for _ in range(D)],
+cov=np.eye(D),
+size=cluster_size
+)
+# Drastically change the third cluster
+data[200:300] = np.random.multivariate_normal(
+mean=[np.random.rand() * 500 for _ in range(D)],
+cov=np.eye(D),
+size=cluster_size
+)
+# We changed the first and third cluster
+changed_list = [True, False, True, False, False]
+# Now partially recalculate the silhouette width
+our_sw, _, _, _ = partial_silh(data, N, cluster_size, K, changed_list, dists, a_vals, b_vals)
+sk_sw = silhouette_score(data, labels, metric='sqeuclidean')
+print(f&amp;quot;Partial method: {our_sw}&amp;quot;)
+print(f&amp;quot;Full method: {full_silh(data, N, cluster_size, K)[0]}&amp;quot;)
+print(f&amp;quot;Scikit-learn: {sk_sw}&amp;quot;)
+assert np.isclose(our_sw, sk_sw)
+&lt;/code>&lt;/pre>
+&lt;pre>&lt;code class="language-bash">Partial method: 0.8991699790956502
+Full method: 0.8991699790956502
+Scikit-learn: 0.8991699790956502
+&lt;/code>&lt;/pre>
+&lt;p>Great! Now, we can look at whether all of this was actually worth it (in terms of computation, at least).&lt;/p>
+&lt;h1 id="comparison">Comparison&lt;/h1>
+&lt;p>To see if the partial calculation is worth it, we need to compare the run times between the full method, the partial method, and the &lt;code>sklearn&lt;/code> method when run first on the dataset, and then again after the data has been modified. By varying some different parameters, such as the proportion of clusters that are being changed, the size of the dataset ($N$) and the dimensionality ($D$), we will see if there is a point where the overhead of partial computation outweighs the savings. After all, matrix multiplications are &lt;em>awfully&lt;/em> efficient, and the overhead we have created with for loops is, well, potentially less efficient. If the proportion of clusters that change is large, it could quite reasonably be that restarting and calculating the full silhouette width is more efficient.&lt;/p>
+&lt;!-- For simplicity, we will be using equally sized clusters, i.e. $|C_{1}| = |C_{2}| = \ldots = |C_{K}| = \frac{N}{K}$. This isn't a requirement, it just makes life easier and the code slightly shorter. -->
+&lt;p>To ensure a robust timing, each method is run 10 times, and the average time is taken. Here is the code for the experiment:&lt;/p>
+&lt;pre>&lt;code class="language-python">def random_data(cluster_size, D, K):
+data_list = []
+for k in range(K):
+# Generate some random normal data
+data = np.random.multivariate_normal(
+mean=[np.random.rand() * 5 * k for _ in range(D)],
+cov=np.eye(D),
+size=cluster_size
+)
+# Append labels to the data
+# Note that this is only needed for the partial computation
+data = np.hstack((data, np.full((cluster_size, 1), k)))
+# Add the data to our list
+data_list.append(data)
+# Create a single array of the data
+full_data = np.concatenate(data_list)
+labels = full_data[:, -1]
+return full_data[:, :-1], labels
 def modify_data(data, changed_list, cluster_size, D):
-    new_data = data.copy()
-    for i, changed in enumerate(changed_list):
-        if changed:
-            start = i*cluster_size
-            stop = start + cluster_size
-            new_data[start:stop] = np.random.multivariate_normal(
-                mean=[np.random.rand() * np.random.randint(100, 1000) for _ in range(D)],
-                cov=np.eye(D),
-                size=cluster_size
-            )
-    return new_data
-
+new_data = data.copy()
+for i, changed in enumerate(changed_list):
+if changed:
+start = i*cluster_size
+stop = start + cluster_size
+new_data[start:stop] = np.random.multivariate_normal(
+mean=[np.random.rand() * np.random.randint(100, 1000) for _ in range(D)],
+cov=np.eye(D),
+size=cluster_size
+)
+return new_data
 def add_result(res, N, D, K, changes, method, time):
-    res[&amp;quot;# Examples&amp;quot;].append(N)
-    res[&amp;quot;Dimensionality&amp;quot;].append(D)
-    res[&amp;quot;Number of Clusters&amp;quot;].append(K)
-    res[&amp;quot;Proportion Changes&amp;quot;].append(changes)
-    res[&amp;quot;Method&amp;quot;].append(method)
-    res[&amp;quot;Time (s)&amp;quot;].append(time)
-    return res
-
+res[&amp;quot;# Examples&amp;quot;].append(N)
+res[&amp;quot;Dimensionality&amp;quot;].append(D)
+res[&amp;quot;Number of Clusters&amp;quot;].append(K)
+res[&amp;quot;Proportion Changes&amp;quot;].append(changes)
+res[&amp;quot;Method&amp;quot;].append(method)
+res[&amp;quot;Time (s)&amp;quot;].append(time)
+return res
 def time_comparison(Ns, Ds, Ks, changes_list):
-    params = product(Ns, Ds, Ks, changes_list)
-    res = defaultdict(list)
-    repeats = 10
-    # Loop over param combs
-    for N, D, K, changes in params:
-        cluster_size = int(N/K)
-        data, labels = random_data(cluster_size, D, K)
-        # Simulate expected mutations
-        changed_list = [True if np.random.rand() &amp;lt; (changes/K) else False for _ in range(K)]
-        # Just modify it the once so it doesn&#39;t interfere with timing
-        new_data = modify_data(data, changed_list, cluster_size, D)
-
-        for _ in range(repeats):
-            # Full calculation
-            start = time.time()
-            # Run initial
-            test = full_silh(data, N, cluster_size, K)
-            # Run on mutated data
-            full_sw, _, _, _ = full_silh(new_data, N, cluster_size, K)
-            full_time = time.time() - start
-            # Store the result
-            res = add_result(res, N, D, K, changes, &amp;quot;Full&amp;quot;, full_time)
-
-            # Partial calculation
-            start = time.time()
-            # Run initial
-            test2, dists, a_vals, b_vals = partial_silh(data, N, cluster_size, K)
-            # Run on mutated data
-            partial_sw, _, _, _ = partial_silh(new_data, N, cluster_size, K, changed_list, dists, a_vals, b_vals)
-            partial_time = time.time() - start
-            # Store the result
-            res = add_result(res, N, D, K, changes, &amp;quot;Partial&amp;quot;, partial_time)
-
-            # sklearn calculation
-            start = time.time()
-            _ = silhouette_score(data, labels, metric=&#39;sqeuclidean&#39;)
-            sklearn_sw = silhouette_score(new_data, labels, metric=&#39;sqeuclidean&#39;)
-            sk_time = time.time() - start
-            # Store the result
-            res = add_result(res, N, D, K, changes, &amp;quot;sklearn&amp;quot;, sk_time)
-            
-            # Check that all the results are the same
-            assert np.isclose(full_sw, partial_sw) and np.isclose(partial_sw, sklearn_sw)
-
-    df = pd.DataFrame(res)
-    df.to_csv(&amp;quot;sw_times.csv&amp;quot;)
-    return df
-
+params = product(Ns, Ds, Ks, changes_list)
+res = defaultdict(list)
+repeats = 10
+# Loop over param combs
+for N, D, K, changes in params:
+cluster_size = int(N/K)
+data, labels = random_data(cluster_size, D, K)
+# Simulate expected mutations
+changed_list = [True if np.random.rand() &amp;lt; (changes/K) else False for _ in range(K)]
+# Just modify it the once so it doesn't interfere with timing
+new_data = modify_data(data, changed_list, cluster_size, D)
+for _ in range(repeats):
+# Full calculation
+start = time.time()
+# Run initial
+test = full_silh(data, N, cluster_size, K)
+# Run on mutated data
+full_sw, _, _, _ = full_silh(new_data, N, cluster_size, K)
+full_time = time.time() - start
+# Store the result
+res = add_result(res, N, D, K, changes, &amp;quot;Full&amp;quot;, full_time)
+# Partial calculation
+start = time.time()
+# Run initial
+test2, dists, a_vals, b_vals = partial_silh(data, N, cluster_size, K)
+# Run on mutated data
+partial_sw, _, _, _ = partial_silh(new_data, N, cluster_size, K, changed_list, dists, a_vals, b_vals)
+partial_time = time.time() - start
+# Store the result
+res = add_result(res, N, D, K, changes, &amp;quot;Partial&amp;quot;, partial_time)
+# sklearn calculation
+start = time.time()
+_ = silhouette_score(data, labels, metric='sqeuclidean')
+sklearn_sw = silhouette_score(new_data, labels, metric='sqeuclidean')
+sk_time = time.time() - start
+# Store the result
+res = add_result(res, N, D, K, changes, &amp;quot;sklearn&amp;quot;, sk_time)
+# Check that all the results are the same
+assert np.isclose(full_sw, partial_sw) and np.isclose(partial_sw, sklearn_sw)
+df = pd.DataFrame(res)
+df.to_csv(&amp;quot;sw_times.csv&amp;quot;)
+return df
 def plot_times(df):
-    # Construct a facetgrid
-    g = sns.FacetGrid(
-        data=df.groupby([&amp;quot;# Examples&amp;quot;, &amp;quot;Dimensionality&amp;quot;, &amp;quot;Proportion Changes&amp;quot;, &amp;quot;Method&amp;quot;])[&amp;quot;Time&amp;quot;].mean().reset_index(),
-        row=&amp;quot;# Examples&amp;quot;,
-        col=&amp;quot;Dimensionality&amp;quot;,
-        hue=&amp;quot;Method&amp;quot;,
-        margin_titles=True
-    )
-    # Plot the data
-    g = g.map(plt.plot, &amp;quot;Proportion Changes&amp;quot;, &amp;quot;Time&amp;quot;, marker=&amp;quot;.&amp;quot;).set(yscale=&amp;quot;log&amp;quot;)
-    g = g.add_legend()
-    # Save the results
-    g.savefig(&amp;quot;sw_times.png&amp;quot;, dpi=600)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
-&lt;p&gt;Below is the plot of results across our different parameters:&lt;/p&gt;
-&lt;img class=&#34;special-img-class&#34; width=&#34;100%&#34; src=&#34;https://sea-shunned.github.io/img/sw_times.png&#34;&gt;
-&lt;p&gt;As expected, the partial computation does reduce the time, but with diminishing and even adverse effects as we increase the proportion of clusters that are being changed. Fortunately in HAWKS, each individual has on average a single change, so we&amp;rsquo;re on the far left-hand side of the x-axis. Our partial method is about twice the speed of the full computation, becoming increasingly useful as $D$ and $N$ increase. Not groundbreaking, but practically useful.&lt;/p&gt;
-&lt;p&gt;Interestingly, it seems that &lt;code&gt;sklearn&lt;/code&gt; is faster for smaller datasets (both in terms of $N$ and $D$), but our full computation is faster as either increases. Although beyond the scope of this post, I would be interested to see if the &lt;code&gt;sklearn&lt;/code&gt; approach is more memory efficient (I believe it is), and when used properly on a server its use of chunking/&lt;code&gt;joblib&lt;/code&gt; can help a lot to explicitly distribute compute.&lt;/p&gt;
-&lt;h1 id=&#34;full-code&#34;&gt;Full code&lt;/h1&gt;
-&lt;p&gt;The full code is available as a &lt;a href=&#34;https://gist.github.com/sea-shunned/6980673d32b0b14fbe181191ec7ef188&#34;&gt;GitHub gist&lt;/a&gt;. It is mostly for illustration, however. &lt;a href=&#34;https://github.com/sea-shunned/hawks/blob/master/hawks/objectives.py&#34;&gt;The code in HAWKS&lt;/a&gt; is a little neater, but I would also recommend checking out &lt;a href=&#34;https://github.com/scikit-learn/scikit-learn/blob/8122e77bee8414c787f4bcd730673d2c0e137d06/sklearn/metrics/cluster/_unsupervised.py#L37&#34;&gt;&lt;code&gt;scikit-learn&lt;/code&gt;&#39;s source code&lt;/a&gt; for another way of doing it, where they also have some great extras that can save on memory (and use &lt;code&gt;joblib&lt;/code&gt; to explicitly parallelize chunks of the distance matrix).&lt;/p&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.sciencedirect.com/science/article/pii/0377042787901257&#34;&gt;Rousseeuw, Peter J. &amp;ldquo;Silhouettes: a graphical aid to the interpretation and validation of cluster analysis.&amp;rdquo; Journal of computational and applied mathematics 20 (1987): 53-65.&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;I use $s_{\textit{all}}$ for this, though I have seen $\tilde{s}$ used. &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;This is quite unrealistic, but relatively simple to change. In HAWKS, we just maintain a list of tuples, denoting the start and end indices for each cluster. We could just create this at the start, and pass this object to our function and use that instead, but to minimize code and variables I&amp;rsquo;m making the cluster sizes equal. &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-</description>
-    </item>
-    
-  </channel>
-</rss>
+# Construct a facetgrid
+g = sns.FacetGrid(
+data=df.groupby([&amp;quot;# Examples&amp;quot;, &amp;quot;Dimensionality&amp;quot;, &amp;quot;Proportion Changes&amp;quot;, &amp;quot;Method&amp;quot;])[&amp;quot;Time&amp;quot;].mean().reset_index(),
+row=&amp;quot;# Examples&amp;quot;,
+col=&amp;quot;Dimensionality&amp;quot;,
+hue=&amp;quot;Method&amp;quot;,
+margin_titles=True
+)
+# Plot the data
+g = g.map(plt.plot, &amp;quot;Proportion Changes&amp;quot;, &amp;quot;Time&amp;quot;, marker=&amp;quot;.&amp;quot;).set(yscale=&amp;quot;log&amp;quot;)
+g = g.add_legend()
+# Save the results
+g.savefig(&amp;quot;sw_times.png&amp;quot;, dpi=600)
+&lt;/code>&lt;/pre>
+&lt;h2 id="results">Results&lt;/h2>
+&lt;p>Below is the plot of results across our different parameters:&lt;/p>
+&lt;img class="special-img-class" width="100%" src="https://sea-shunned.github.io/img/sw_times.png">
+&lt;p>As expected, the partial computation does reduce the time, but with diminishing and even adverse effects as we increase the proportion of clusters that are being changed. Fortunately in HAWKS, each individual has on average a single change, so we&amp;rsquo;re on the far left-hand side of the x-axis. Our partial method is about twice the speed of the full computation, becoming increasingly useful as $D$ and $N$ increase. Not groundbreaking, but practically useful.&lt;/p>
+&lt;p>Interestingly, it seems that &lt;code>sklearn&lt;/code> is faster for smaller datasets (both in terms of $N$ and $D$), but our full computation is faster as either increases. Although beyond the scope of this post, I would be interested to see if the &lt;code>sklearn&lt;/code> approach is more memory efficient (I believe it is), and when used properly on a server its use of chunking/&lt;code>joblib&lt;/code> can help a lot to explicitly distribute compute.&lt;/p>
+&lt;h1 id="full-code">Full code&lt;/h1>
+&lt;p>The full code is available as a &lt;a href="https://gist.github.com/sea-shunned/6980673d32b0b14fbe181191ec7ef188">GitHub gist&lt;/a>. It is mostly for illustration, however. &lt;a href="https://github.com/sea-shunned/hawks/blob/master/hawks/objectives.py">The code in HAWKS&lt;/a> is a little neater, but I would also recommend checking out &lt;a href="https://github.com/scikit-learn/scikit-learn/blob/8122e77bee8414c787f4bcd730673d2c0e137d06/sklearn/metrics/cluster/_unsupervised.py#L37">&lt;code>scikit-learn&lt;/code>&amp;rsquo;s source code&lt;/a> for another way of doing it, where they also have some great extras that can save on memory (and use &lt;code>joblib&lt;/code> to explicitly parallelize chunks of the distance matrix).&lt;/p>
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>&lt;a href="https://www.sciencedirect.com/science/article/pii/0377042787901257">Rousseeuw, Peter J. &amp;ldquo;Silhouettes: a graphical aid to the interpretation and validation of cluster analysis.&amp;rdquo; Journal of computational and applied mathematics 20 (1987): 53-65.&lt;/a> &lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2" role="doc-endnote">
+&lt;p>I use $s_{\textit{all}}$ for this, though I have seen $\tilde{s}$ used. &lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:3" role="doc-endnote">
+&lt;p>This is quite unrealistic, but relatively simple to change. In HAWKS, we just maintain a list of tuples, denoting the start and end indices for each cluster. We could just create this at the start, and pass this object to our function and use that instead, but to minimize code and variables I&amp;rsquo;m making the cluster sizes equal. &lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item></channel></rss>
